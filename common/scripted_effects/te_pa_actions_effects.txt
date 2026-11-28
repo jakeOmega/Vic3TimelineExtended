@@ -92,6 +92,8 @@ te_pa_sa_suit = {
 te_pa_sa_audit = {
 	save_scope_as = te_pa_home
 	scope:te_pa_act_firm ?= {
+		# The roll's firm, for the rival presses' term in its chance (te_pa_press_rival_term, Task 5a).
+		save_scope_as = te_pa_expose_firm
 		set_variable = { name = te_pa_audit_again value = te_pa_audit_again_value }
 		set_variable = { name = te_pa_audit_found value = 0 }
 		if = {

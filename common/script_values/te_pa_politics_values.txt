@@ -1,0 +1,629 @@
+﻿# Private Actors, politics at home: the numbers and the readings (docs/systems/mod_systems/private_actors.md
+# § Politics at Home; spec §§ 8.2, 8.3, 8.5; plan Task 5). Every number is a first guess, named here so a later task
+# or a play-test can move it. The effects are te_pa_politics_effects.txt's, the triggers te_pa_politics_triggers.txt's.
+
+# ---------------------------------------------------------------------------
+# Readers: a record variable, 0 while unset (company scope unless noted)
+# ---------------------------------------------------------------------------
+
+te_pa_v_press = { value = 0 if = { limit = { has_variable = te_pa_press } value = var:te_pa_press } }
+te_pa_v_stake_law = { value = 0 if = { limit = { has_variable = te_pa_stake_law } value = var:te_pa_stake_law } }
+te_pa_v_side_of = { value = 0 if = { limit = { has_variable = te_pa_side_of } value = var:te_pa_side_of } }
+te_pa_v_side_sign = { value = 0 if = { limit = { has_variable = te_pa_side_sign } value = var:te_pa_side_sign } }
+te_pa_v_side_spent = { value = 0 if = { limit = { has_variable = te_pa_side_spent } value = var:te_pa_side_spent } }
+te_pa_v_cm_secret = { value = 0 if = { limit = { has_variable = te_pa_cm_secret } value = var:te_pa_cm_secret } }
+te_pa_v_cm_secret_units = {
+	value = 0
+	if = { limit = { has_variable = te_pa_cm_secret_units } value = var:te_pa_cm_secret_units }
+}
+te_pa_v_campaign_total = {
+	value = 0
+	if = { limit = { has_variable = te_pa_campaign_total } value = var:te_pa_campaign_total }
+}
+te_pa_v_cartel_barred_until = {
+	value = 0
+	if = { limit = { has_variable = te_pa_cartel_barred_until } value = var:te_pa_cartel_barred_until }
+}
+# Country scope.
+te_pa_v_side_law = { value = 0 if = { limit = { has_variable = te_pa_side_law } value = var:te_pa_side_law } }
+te_pa_v_stall_law = { value = 0 if = { limit = { has_variable = te_pa_stall_law } value = var:te_pa_stall_law } }
+te_pa_v_speed_law = { value = 0 if = { limit = { has_variable = te_pa_speed_law } value = var:te_pa_speed_law } }
+
+# Company scope. The law table's number of the law its country is enacting (0 when none, or not covered).
+te_pa_enacting_law_firm = {
+	value = 0
+	owner = { add = te_pa_gen_enacting_law_index }
+}
+
+# Company scope. The number of the law its country's sides are on, 0 when none.
+te_pa_side_law_now = {
+	value = 0
+	owner = { add = te_pa_v_side_law }
+}
+
+# ---------------------------------------------------------------------------
+# Sides (§ 8.2): for the law being enacted, every firm has a stance (the law table's, -2 to 2); what firms spend on
+# their side adds up; when the enactment ends, each that spent on the winning side gains Connections and each on the
+# losing side loses them. A firm with another goal than A Friendly Law spends only on a stance of this weight, and
+# half as much.
+# ---------------------------------------------------------------------------
+
+te_pa_side_conn_win = 5
+te_pa_side_conn_lose = 5
+te_pa_side_weight_other = 2
+te_pa_side_share_other = 0.5
+
+# Company scope. Its stance on the law being enacted, whichever way it points.
+te_pa_side_stance_size = {
+	value = te_pa_gen_stance_enacting
+	if = { limit = { te_pa_gen_stance_enacting < 0 } multiply = -1 }
+}
+
+# Country scope. How far the law being enacted is from the one the sides are on (0: the same law).
+te_pa_side_law_gap = {
+	value = te_pa_gen_enacting_law_index
+	subtract = te_pa_v_side_law
+	if = { limit = { te_pa_gen_enacting_law_index < te_pa_v_side_law } multiply = -1 }
+}
+
+# Company scope, a side spend made: what it has spent on its side in all.
+te_pa_side_spent_after = {
+	value = te_pa_v_side_spent
+	add = var:te_pa_cm_paid
+}
+
+te_pa_conn_after_side_win = {
+	value = te_pa_v_conn
+	add = te_pa_side_conn_win
+	max = 100
+}
+te_pa_conn_after_side_lose = {
+	value = te_pa_v_conn
+	subtract = te_pa_side_conn_lose
+	min = 0
+}
+
+# Country scope (scope:te_pa_side_home): the order a side's firms are ranked by (ordered_company sorts the highest
+# first), what each has spent on it.
+te_pa_side_rank_order = { value = te_pa_v_side_spent }
+
+# Country scope. The country's firms for and against the law being enacted (stance above or below 0, read now).
+te_pa_side_count_for = {
+	value = 0
+	every_company = {
+		limit = {
+			has_variable = te_pa_init
+			te_pa_gen_stance_enacting > 0
+		}
+		add = 1
+	}
+}
+te_pa_side_count_against = {
+	value = 0
+	every_company = {
+		limit = {
+			has_variable = te_pa_init
+			te_pa_gen_stance_enacting < 0
+		}
+		add = 1
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Stall and speed (§ 8.3): 20 Connections for one setback on a law a firm is against (Task 4a's te_pa_stall_conn,
+# te_pa_stall_months) or for ten points of the current checkpoint on a law it is for (add_law_progress takes a
+# fraction, 0.1 = ten percentage points); once a year a firm, and one of each a year a law from all firms together.
+# ---------------------------------------------------------------------------
+
+te_pa_speed_conn = 20
+te_pa_speed_months = 12
+te_pa_speed_progress = 0.1
+te_pa_law_once_months = 12
+
+# Company scope. Months since its last speed, 0 while it has none.
+te_pa_speed_since = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_speed_month }
+		value = te_history_month_index
+		subtract = var:te_pa_speed_month
+	}
+}
+te_pa_conn_after_speed = {
+	value = te_pa_v_conn
+	subtract = te_pa_speed_conn
+	min = 0
+}
+
+# Country scope. 1 while some firm set back (or sped) the law being enacted within te_pa_law_once_months.
+te_pa_stall_law_recent = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_pa_stall_law_month
+			te_pa_v_stall_law > 0
+			te_pa_v_stall_law >= te_pa_gen_enacting_law_index
+			te_pa_v_stall_law <= te_pa_gen_enacting_law_index
+			te_pa_stall_law_since < te_pa_law_once_months
+		}
+		value = 1
+	}
+}
+te_pa_stall_law_since = {
+	value = 999
+	if = {
+		limit = { has_variable = te_pa_stall_law_month }
+		value = te_history_month_index
+		subtract = var:te_pa_stall_law_month
+	}
+}
+te_pa_speed_law_recent = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_pa_speed_law_month
+			te_pa_v_speed_law > 0
+			te_pa_v_speed_law >= te_pa_gen_enacting_law_index
+			te_pa_v_speed_law <= te_pa_gen_enacting_law_index
+			te_pa_speed_law_since < te_pa_law_once_months
+		}
+		value = 1
+	}
+}
+te_pa_speed_law_since = {
+	value = 999
+	if = {
+		limit = { has_variable = te_pa_speed_law_month }
+		value = te_history_month_index
+		subtract = var:te_pa_speed_law_month
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Campaign money (§ 8.3)
+# ---------------------------------------------------------------------------
+# What a firm spends: half a year's accrual, at least te_pa_cm_cost_floor pounds (a side's half spend, half that).
+# What it buys is counted in units of a thousandth of its country's yearly investment-pool income, so it weighs the
+# same in a small country as in a large one:
+#   - momentum for a party in a campaign: te_pa_cm_momentum_per a unit, at most te_pa_cm_momentum_max a spend
+#     (vanilla's momentum_medium, a medium election event, is 0.2);
+#   - patronage for an interest group: the country's total for the group, in units, gives it political strength,
+#     the full te_pa_patronage_cap (20%) at te_pa_pat_full_units; the total keeps te_pa_pat_keep of itself each
+#     quarter, so it has faded about three years after the money stops.
+# Its press makes it count te_pa_press_cm_extra more at strength 100 (§ 8.5).
+te_pa_cm_cost_years = 0.5
+te_pa_cm_cost_floor = 250
+te_pa_cm_unit_share = 0.001
+te_pa_cm_momentum_per = 0.05
+te_pa_cm_momentum_max = 0.2
+te_pa_pat_full_units = 10
+te_pa_pat_keep = 0.8
+te_pa_pat_floor = 0.05
+te_pa_press_cm_extra = 0.25
+# The Electoral Finance laws (§ 8.3's table): under Donation Limits a firm spends openly up to te_pa_cm_limit_share of
+# its country's yearly investment-pool income a spend, and the rest in secret; under Publicly Funded Elections only in
+# secret, at half effect. A firm goes on in secret only while its executive's Boldness (te_pa_bold_t, -1 to 1) is at
+# least te_pa_cm_secret_bold.
+te_pa_cm_limit_share = 0.01
+te_pa_cm_secret_public_mult = 0.5
+te_pa_cm_secret_bold = 0
+# Secret money, exposed: the Standing and Connections it costs under each law (Task 4a's te_pa_expose_stand_loss is
+# a holding's), and what it bought is taken back from the group's patronage. Secret money still at risk keeps
+# te_pa_pat_keep of itself a quarter, like the patronage it bought, and is gone below te_pa_cm_secret_floor pounds.
+te_pa_cm_expose_stand_limits = 10
+te_pa_cm_expose_stand_public = 15
+te_pa_cm_expose_conn_public = 10
+te_pa_cm_secret_floor = 10
+# The wager (§ 8.3): the side it backed in government after the election, or its patronized group entering
+# government, +10 Connections; not, -5. A patronage wager on a group already in government is read
+# te_pa_bet_months later.
+te_pa_bet_win = 10
+te_pa_bet_lose = 5
+te_pa_bet_months = 36
+
+# Country scope. The yearly investment-pool income (the engine's figure is weekly), and a unit of campaign money.
+te_pa_cm_pool_year = {
+	value = investment_pool_gross_income
+	multiply = te_pa_weeks_a_year
+	min = 0
+}
+te_pa_cm_unit = {
+	value = te_pa_cm_pool_year
+	multiply = te_pa_cm_unit_share
+	min = 1
+}
+# Country scope. Donation Limits' open cap for one firm's spend.
+te_pa_cm_cap = {
+	value = te_pa_cm_pool_year
+	multiply = te_pa_cm_limit_share
+}
+
+# Company scope. A spend, in full and at half (a side's spend by a firm whose goal is another).
+te_pa_cm_cost_full_value = {
+	value = te_pa_funds_year
+	multiply = te_pa_cm_cost_years
+	min = te_pa_cm_cost_floor
+}
+te_pa_cm_cost_half_value = {
+	value = te_pa_cm_cost_full_value
+	multiply = te_pa_side_share_other
+}
+# Company scope. What its side spend asks (te_pa_can_back_side).
+te_pa_cm_cost_side_value = {
+	value = te_pa_cm_cost_half_value
+	if = { limit = { te_pa_back_side_full = yes } value = te_pa_cm_cost_full_value }
+}
+
+# Company scope, inside te_pa_campaign_spend (te_pa_cm_want staged): the part it spends openly and the part in secret.
+te_pa_cm_open_value = {
+	value = var:te_pa_cm_want
+	if = {
+		limit = { owner = { te_pa_ef_limits = yes } }
+		max = { value = 0 owner = { add = te_pa_cm_cap } }
+	}
+	if = { limit = { owner = { te_pa_ef_public = yes } } value = 0 }
+	min = 0
+}
+te_pa_cm_hidden_value = {
+	value = 0
+	if = {
+		limit = { te_pa_v_bold >= te_pa_cm_secret_bold }
+		if = {
+			limit = { owner = { te_pa_ef_limits = yes } }
+			value = var:te_pa_cm_want
+			subtract = { value = 0 owner = { add = te_pa_cm_cap } }
+		}
+		else_if = {
+			limit = { owner = { te_pa_ef_public = yes } }
+			value = var:te_pa_cm_want
+		}
+	}
+	min = 0
+}
+# What the spend takes (te_pa_spend_funds' AMOUNT): the open part and the secret part.
+te_pa_cm_spend_value = {
+	value = var:te_pa_cm_open
+	add = var:te_pa_cm_hidden
+}
+
+# Company scope. Its press's lift to what its money buys: 1, up to 1 + te_pa_press_cm_extra at strength 100.
+te_pa_press_cm_factor = {
+	value = te_pa_v_press
+	divide = 100
+	multiply = te_pa_press_cm_extra
+	add = 1
+}
+
+# Company scope, after the spend: what it bought, in units, the secret part at half under Publicly Funded Elections.
+te_pa_cm_secret_units_value = {
+	value = var:te_pa_cm_hidden
+	if = { limit = { owner = { te_pa_ef_public = yes } } multiply = te_pa_cm_secret_public_mult }
+	multiply = te_pa_press_cm_factor
+	divide = { value = 0 owner = { add = te_pa_cm_unit } }
+}
+te_pa_cm_units_value = {
+	value = var:te_pa_cm_open
+	multiply = te_pa_press_cm_factor
+	divide = { value = 0 owner = { add = te_pa_cm_unit } }
+	add = te_pa_cm_secret_units_value
+}
+
+# Any scope, with scope:te_pa_stake_firm the spender (an add_momentum's value is read in the party's scope): the
+# momentum its units buy.
+te_pa_cm_momentum_value = {
+	value = 0
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { has_variable = te_pa_cm_units } }
+		value = scope:te_pa_stake_firm.var:te_pa_cm_units
+		multiply = te_pa_cm_momentum_per
+	}
+	max = te_pa_cm_momentum_max
+	min = 0
+}
+
+# Company scope. Its campaign spending in all, after this spend.
+te_pa_campaign_total_after = {
+	value = te_pa_v_campaign_total
+	add = var:te_pa_cm_open
+	add = var:te_pa_cm_hidden
+}
+
+# Company scope. Secret money still at risk, after a spend and after a quarter.
+te_pa_cm_secret_after_spend = {
+	value = te_pa_v_cm_secret
+	add = var:te_pa_cm_hidden
+}
+te_pa_cm_secret_units_after_spend = {
+	value = te_pa_v_cm_secret_units
+	add = te_pa_cm_secret_units_value
+}
+te_pa_cm_secret_after_quarter = {
+	value = te_pa_v_cm_secret
+	multiply = te_pa_pat_keep
+}
+te_pa_cm_secret_units_after_quarter = {
+	value = te_pa_v_cm_secret_units
+	multiply = te_pa_pat_keep
+}
+
+# Company scope. What exposing its secret money costs: Standing (halved by its press, § 8.5) and, under Publicly
+# Funded Elections, Connections.
+te_pa_stand_after_cm_exposure = {
+	value = te_pa_v_stand
+	subtract = {
+		value = te_pa_cm_expose_stand_limits
+		if = { limit = { owner = { te_pa_ef_public = yes } } value = te_pa_cm_expose_stand_public }
+		multiply = te_pa_press_stand_factor
+	}
+	min = 0
+}
+te_pa_conn_after_cm_exposure = {
+	value = te_pa_v_conn
+	if = { limit = { owner = { te_pa_ef_public = yes } } subtract = te_pa_cm_expose_conn_public }
+	min = 0
+}
+
+# The money's yearly exposure roll (te_pa_expose_rolls): a holding's chance (te_pa_expose_chance_value: the state,
+# buyers' pressure, and the hook's terms, an Inquiry's and the presses' among them), rounded.
+te_pa_expose_cm_value = {
+	value = te_pa_expose_chance_value
+	round = yes
+	min = 0
+}
+
+# The wager, read later: the month a patronage wager on a group already in government is settled.
+te_pa_bet_until_value = {
+	value = te_history_month_index
+	add = te_pa_bet_months
+}
+te_pa_conn_after_bet_win = {
+	value = te_pa_v_conn
+	add = te_pa_bet_win
+	max = 100
+}
+te_pa_conn_after_bet_lose = {
+	value = te_pa_v_conn
+	subtract = te_pa_bet_lose
+	min = 0
+}
+
+# ---------------------------------------------------------------------------
+# Who the money goes to (§ 8.3), with scope:te_pa_stake_firm the spender
+# ---------------------------------------------------------------------------
+
+# Interest group scope. How well the group stands on the firm's law at stake, for its side: its stance on the law
+# (te_pa_gen_ig_stake_stance), or on Free Trade where the stake is the trade policy, the other way where the firm is
+# against it (te_pa_stake_sign -1).
+te_pa_ig_side_value = {
+	value = 0
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_trade ?= 1 } }
+		add = te_pa_ig_free_trade_stance
+	}
+	else = {
+		add = te_pa_gen_ig_stake_stance
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_sign ?= -1 } }
+		multiply = -1
+	}
+}
+
+# Interest group scope. Its stance on Free Trade, +2 to -2 (the trade policy is read from the market, not the law
+# table, so its law has no number there).
+te_pa_ig_free_trade_stance = {
+	value = 0
+	if = { limit = { law_stance = { law = law_type:law_free_trade value > approve } } value = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_free_trade value > neutral } } value = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_free_trade value < disapprove } } value = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_free_trade value < neutral } } value = -1 }
+}
+
+# Party scope. How well its members stand on the firm's side, weighed by their clout (me_py_<issue>_support's shape,
+# me_election_issue_values.txt).
+te_pa_party_side_value = {
+	value = 0
+	every_member = {
+		add = {
+			value = te_pa_ig_side_value
+			multiply = ig_clout
+		}
+	}
+}
+
+# Party scope. Its momentum now (the momentum_from_pulse self-check's read).
+te_pa_party_momentum = { value = momentum }
+
+# ---------------------------------------------------------------------------
+# Patronage (§ 8.3): one total an interest group on the country (te_pa_pat_<group>, units), its modifier's
+# multiplier the total over te_pa_pat_full_units, at most 1 (te_pa_pat_quarter_one)
+# ---------------------------------------------------------------------------
+
+# Country scope: the campaign money units staged for te_pa_gen_pat_add / _cmp_add, and taken back for _pat_take.
+te_pa_v_cm_stage = { value = 0 if = { limit = { has_variable = te_pa_cm_stage } value = var:te_pa_cm_stage } }
+
+# Container scope, a Politics row: the political strength its group's patronage gives (te_pa_patronage_cap at 1).
+te_pa_pv_pol_str = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_pv_mult }
+		value = var:te_pa_pv_mult
+		multiply = te_pa_gen_patronage_cap
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The press (§ 8.5): founded, then kept by upkeep; strength grows 8 a year; at 100, in proportion below:
+#   its own secret moves' yearly exposure chance te_pa_press_own_cut points lower;
+#   the chance of a firm on the other side of its law, and of a cartel that sells its input, te_pa_press_push higher
+#     (points, as an Inquiry's are: te_pa_expose_hook_value), so two papers on two sides net out;
+#   its campaign money counts te_pa_press_cm_extra more; an exposure costs it te_pa_press_stand_cut less Standing.
+# Discredited, it loses te_pa_press_discredit when its owner's secret move is exposed after the press denied it.
+# ---------------------------------------------------------------------------
+
+te_pa_press_cost_years = 1
+te_pa_press_cost_floor = 1000
+te_pa_press_spare_years = 1
+te_pa_press_upkeep_years = 0.2
+te_pa_press_upkeep_floor = 50
+te_pa_press_start = 5
+te_pa_press_growth_year = 8
+te_pa_press_decay_year = 5
+te_pa_press_own_cut = 30
+te_pa_press_push = 30
+te_pa_press_stand_cut = 0.5
+te_pa_press_discredit = 30
+# A firm whose press was closed waits this long before it founds another.
+te_pa_press_again_months = 60
+
+te_pa_press_cost_value = {
+	value = te_pa_funds_year
+	multiply = te_pa_press_cost_years
+	min = te_pa_press_cost_floor
+}
+te_pa_press_spare_value = {
+	value = te_pa_funds_year
+	multiply = te_pa_press_spare_years
+	add = te_pa_press_cost_value
+}
+te_pa_press_upkeep_value = {
+	value = te_pa_funds_year
+	multiply = te_pa_press_upkeep_years
+	divide = te_pa_quarters_a_year
+	min = te_pa_press_upkeep_floor
+}
+te_pa_press_after_growth = {
+	value = te_pa_v_press
+	add = { value = te_pa_press_growth_year divide = te_pa_quarters_a_year }
+	max = 100
+}
+te_pa_press_after_decay = {
+	value = te_pa_v_press
+	subtract = { value = te_pa_press_decay_year divide = te_pa_quarters_a_year }
+	min = 0
+}
+te_pa_press_after_discredit = {
+	value = te_pa_v_press
+	subtract = te_pa_press_discredit
+	min = 0
+}
+te_pa_press_again_value = {
+	value = te_history_month_index
+	add = te_pa_press_again_months
+}
+
+# Company scope. The share of an exposure's Standing it pays (1 with no press, half at strength 100).
+te_pa_press_stand_factor = {
+	value = te_pa_v_press
+	divide = 100
+	multiply = te_pa_press_stand_cut
+	subtract = 1
+	multiply = -1
+}
+
+# Company scope (the firm whose secret holding is rolled). Its own press's term in the exposure hook (negative).
+te_pa_press_own_term = {
+	value = te_pa_v_press
+	divide = 100
+	multiply = te_pa_press_own_cut
+	multiply = -1
+}
+
+# Company scope (a press's firm, an entry of te_pa_presses): its press's push on the firm being rolled.
+te_pa_press_push_value = {
+	value = te_pa_v_press
+	divide = 100
+	multiply = te_pa_press_push
+}
+
+# Company scope (the firm being rolled, scope:te_pa_expose_firm saved by the roll's caller). The other presses' terms:
+# each press that hits it (te_pa_press_hits) pushes its chance up. 0 while no roll has saved the scope.
+te_pa_press_rival_term = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:te_pa_expose_firm
+			owner = { has_variable_list = te_pa_presses }
+		}
+		owner = {
+			every_in_list = {
+				variable = te_pa_presses
+				limit = { te_pa_press_hits = yes }
+				add = te_pa_press_push_value
+			}
+		}
+	}
+}
+
+# Company scope (a press's firm), with scope:te_pa_expose_firm the firm rolled: the product of the two firms' sides
+# on the law being enacted (-1: opposite sides), its inputs, and the rolled firm's main output (goods by index).
+te_pa_v_side_sign_product = {
+	value = te_pa_v_side_sign
+	multiply = {
+		value = 0
+		if = {
+			limit = { exists = scope:te_pa_expose_firm }
+			scope:te_pa_expose_firm = { add = te_pa_v_side_sign }
+		}
+	}
+}
+te_pa_press_in1 = { value = 0 if = { limit = { has_variable = te_pa_g_in1_good } value = var:te_pa_g_in1_good } }
+te_pa_press_in2 = { value = 0 if = { limit = { has_variable = te_pa_g_in2_good } value = var:te_pa_g_in2_good } }
+te_pa_press_x_out = {
+	value = 0
+	if = {
+		limit = { scope:te_pa_expose_firm ?= { has_variable = te_pa_g_out_good } }
+		value = scope:te_pa_expose_firm.var:te_pa_g_out_good
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The tab (container scope, a row): the press's yields as its hover shows them
+# ---------------------------------------------------------------------------
+
+te_pa_row_press_cut = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_r_press }
+		value = var:te_pa_r_press
+		multiply = te_pa_press_own_cut
+		divide = 100
+	}
+}
+te_pa_row_press_push = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_r_press }
+		value = var:te_pa_r_press
+		multiply = te_pa_press_push
+		divide = 100
+	}
+}
+te_pa_row_press_cm = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_r_press }
+		value = var:te_pa_r_press
+		multiply = te_pa_press_cm_extra
+		divide = 100
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The tab's Politics section (country scope, gui/te_pa_widgets.gui): the stored figures, 0 while unset
+# ---------------------------------------------------------------------------
+
+te_pa_pol_has_law = { value = 0 if = { limit = { has_variable = te_pa_side_law } value = 1 } }
+te_pa_pol_for = { value = 0 if = { limit = { has_variable = te_pa_side_for } value = var:te_pa_side_for } }
+te_pa_pol_against = { value = 0 if = { limit = { has_variable = te_pa_side_against } value = var:te_pa_side_against } }
+te_pa_pol_n_for = { value = 0 if = { limit = { has_variable = te_pa_side_n_for } value = var:te_pa_side_n_for } }
+te_pa_pol_n_against = { value = 0 if = { limit = { has_variable = te_pa_side_n_against } value = var:te_pa_side_n_against } }
+te_pa_pol_amt_for_1 = { value = 0 if = { limit = { has_variable = te_pa_side_amt_for_1 } value = var:te_pa_side_amt_for_1 } }
+te_pa_pol_amt_for_2 = { value = 0 if = { limit = { has_variable = te_pa_side_amt_for_2 } value = var:te_pa_side_amt_for_2 } }
+te_pa_pol_amt_for_3 = { value = 0 if = { limit = { has_variable = te_pa_side_amt_for_3 } value = var:te_pa_side_amt_for_3 } }
+te_pa_pol_amt_against_1 = { value = 0 if = { limit = { has_variable = te_pa_side_amt_against_1 } value = var:te_pa_side_amt_against_1 } }
+te_pa_pol_amt_against_2 = { value = 0 if = { limit = { has_variable = te_pa_side_amt_against_2 } value = var:te_pa_side_amt_against_2 } }
+te_pa_pol_amt_against_3 = { value = 0 if = { limit = { has_variable = te_pa_side_amt_against_3 } value = var:te_pa_side_amt_against_3 } }
+te_pa_pol_secret_value = { value = 0 if = { limit = { has_variable = te_pa_pol_secret } value = var:te_pa_pol_secret } }
+te_pa_pol_campaign_value = { value = 0 if = { limit = { has_variable = te_pa_pol_campaign } value = var:te_pa_pol_campaign } }
+

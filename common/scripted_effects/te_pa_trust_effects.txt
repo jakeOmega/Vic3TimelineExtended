@@ -47,6 +47,10 @@ te_pa_act = {
 		te_pa_act_market = yes
 	}
 	else_if = {
+		limit = { var:te_pa_goal ?= 4 }
+		te_pa_act_law = yes
+	}
+	else_if = {
 		limit = { var:te_pa_goal ?= 5 }
 		te_pa_act_dominance = yes
 	}
@@ -54,11 +58,22 @@ te_pa_act = {
 		limit = { te_pa_can_endow = yes }
 		te_pa_do_endow = yes
 	}
+	# Task 5a (te_pa_politics_effects.txt): its money on its side of the law being enacted (§ 8.2), and a press where
+	# it has a secret to hide or a law at stake (§ 8.5), after the goal's verb like the foundation.
+	if = {
+		limit = { te_pa_can_back_side = yes }
+		te_pa_do_back_side = yes
+	}
+	if = {
+		limit = { te_pa_can_found_press = yes }
+		te_pa_do_found_press = yes
+	}
 }
 
 # Cheaper Inputs (§ 6.3): a buyer of a known cartel's good petitions the state to sue it (a declared move, Task 4b);
-# a buyer of a secret one's pays to expose it. (Task 5 adds the side on a tariff, Task 9 a concession where the good
-# is made.)
+# a buyer of a secret one's pays to expose it; where the trade policy taxes its imported inputs, campaign money for
+# the side that would lift it (Task 5a, § 8.3; the tariffs themselves are Task 5b's). (Task 9 adds a concession where
+# the good is made.)
 te_pa_act_inputs = {
 	if = {
 		limit = { te_pa_can_declare_suit = yes }
@@ -68,10 +83,14 @@ te_pa_act_inputs = {
 		limit = { te_pa_can_press_cartel = yes }
 		te_pa_do_press_cartel = yes
 	}
+	else_if = {
+		limit = { te_pa_can_campaign = yes }
+		te_pa_do_campaign = yes
+	}
 }
 
 # A Protected Market (§ 6.1): the cartel's defence first, then a charter for it (§ 6.5, a declared move), then the
-# cartel. (Task 5 adds the tariff.)
+# cartel; then the defence's press and campaign money (§ 6.4, Task 5a). (Task 5b adds the tariff.)
 te_pa_act_market = {
 	if = {
 		limit = { te_pa_can_stall = yes }
@@ -89,10 +108,19 @@ te_pa_act_market = {
 		limit = { te_pa_can_capture_reg = yes }
 		te_pa_do_capture_reg = yes
 	}
+	else_if = {
+		limit = { te_pa_can_found_press = yes }
+		te_pa_do_found_press = yes
+	}
+	else_if = {
+		limit = { te_pa_can_campaign = yes }
+		te_pa_do_campaign = yes
+	}
 }
 
 # Dominance (§ 6.1): defend the cartel, ask for a charter for it (§ 6.5, a declared move), form it, entrench it behind
-# a regulator; below the cartel's share, build in the sector. The spec orders no trust verb by temperament (Paternalism's "endows a foundation early" moves the
+# a regulator and a press (§ 6.4, Task 5a); below the cartel's share, build in the sector; else campaign money on its
+# law at stake. The spec orders no trust verb by temperament (Paternalism's "endows a foundation early" moves the
 # foundation's Standing line, te_pa_found_stand_line), and each of these four needs its own position (a cartel or
 # none, the share or below it), so the order tells only for a cartel firm: defend it, then entrench it.
 te_pa_act_dominance = {
@@ -113,8 +141,16 @@ te_pa_act_dominance = {
 		te_pa_do_capture_reg = yes
 	}
 	else_if = {
+		limit = { te_pa_can_found_press = yes }
+		te_pa_do_found_press = yes
+	}
+	else_if = {
 		limit = { te_pa_can_expand = yes }
 		te_pa_do_expand = yes
+	}
+	else_if = {
+		limit = { te_pa_can_campaign = yes }
+		te_pa_do_campaign = yes
 	}
 }
 
@@ -364,16 +400,18 @@ te_pa_reg_quarter = {
 }
 
 # ---------------------------------------------------------------------------
-# Stalling the law (§ 6.4; Task 5 widens it to its politics)
+# Stalling the law (§ 6.4; Task 5a widens it to a law the firm is against, te_pa_politics_triggers.txt)
 # ---------------------------------------------------------------------------
 
-# Company scope (scope:te_pa_home its country). Twenty Connections for one setback to the law that would outlaw its
-# cartel, logged with the law named (te_pa_l_law, the law table's number).
+# Company scope (scope:te_pa_home its country). Twenty Connections for one setback to a law it is against, logged
+# with the law named (te_pa_l_law, the law table's number); the country marks the law and the month, so no other
+# firm sets it back within the year (§ 8.3: one setback a year a law from all firms together).
 te_pa_do_stall = {
 	set_variable = { name = te_pa_conn value = te_pa_conn_after_stall }
 	set_variable = { name = te_pa_stall_month value = te_history_month_index }
 	scope:te_pa_home = {
 		set_variable = { name = te_pa_stall_law value = te_pa_gen_enacting_law_index }
+		set_variable = { name = te_pa_stall_law_month value = te_history_month_index }
 		add_enactment_setback = 1
 	}
 	save_scope_as = te_pa_l_actor
@@ -451,8 +489,11 @@ te_pa_expose_push_quarter = {
 # ---------------------------------------------------------------------------
 
 # Company scope, the turn, after the verb. A yearly roll for each secret holding: the cartel's chance cut by the
-# captured regulator's strength, the regulator's its own (te_pa_trust_values.txt).
+# captured regulator's strength, the regulator's its own (te_pa_trust_values.txt), and secret campaign money's
+# (Task 5a, te_pa_expose_cm). The firm is saved as scope:te_pa_expose_firm, which the rival presses' term reads
+# (te_pa_press_rival_term, te_pa_expose_hook_value).
 te_pa_expose_rolls = {
+	save_scope_as = te_pa_expose_firm
 	if = {
 		limit = {
 			te_pa_v_cartel > 0
@@ -471,6 +512,13 @@ te_pa_expose_rolls = {
 		random = {
 			chance = te_pa_expose_reg_value
 			te_pa_expose_reg = yes
+		}
+	}
+	if = {
+		limit = { te_pa_v_cm_secret > 0 }
+		random = {
+			chance = te_pa_expose_cm_value
+			te_pa_expose_cm = yes
 		}
 	}
 }
@@ -496,9 +544,10 @@ te_pa_expose_reg = {
 }
 
 # Company scope. What an exposure costs (§ 4.3: attacks aim at a currency; § 5.5: the gift now looks like cover):
-# Standing, and the foundation's taint.
+# Standing (halved by its press, § 8.5), the foundation's taint, and its press discredited (Task 5a).
 te_pa_exposure_costs = {
 	set_variable = { name = te_pa_stand value = te_pa_stand_after_exposure }
+	te_pa_press_discredit = yes
 	if = {
 		limit = { te_pa_v_found > 0 }
 		set_variable = { name = te_pa_found value = te_pa_found_after_taint }
@@ -824,7 +873,7 @@ te_pa_trust_quarter = {
 	te_pa_found_quarter = yes
 	te_pa_expose_push_quarter = yes
 	if = {
-		limit = { te_pa_can_stall = yes }
+		limit = { te_pa_can_stall_cartel = yes }
 		te_pa_do_stall = yes
 	}
 }

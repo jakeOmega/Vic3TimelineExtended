@@ -143,19 +143,8 @@ te_pa_can_capture_reg = {
 	te_pa_v_conn >= te_pa_reg_conn_quarter
 }
 
-# Stall the law (§ 6.4): it holds a cartel, a law being enacted would outlaw it, it has the Connections, a year has
-# passed since its last stall, and the enactment can take another setback without failing outright (vanilla's
-# guard, events/ministry_law_events.txt).
-te_pa_can_stall = {
-	te_pa_v_cartel > 0
-	te_pa_v_conn >= te_pa_stall_conn
-	trigger_if = {
-		limit = { has_variable = te_pa_stall_month }
-		te_pa_stall_since >= te_pa_stall_months
-	}
-	te_pa_law_threatens_cartel = yes
-	owner = { enactment_setback_count < max_setbacks_minus_one }
-}
+# Stall the law (§ 6.4): te_pa_can_stall, widened by Task 5a to any law a firm is against, and the quarter's
+# te_pa_can_stall_cartel are te_pa_politics_triggers.txt's.
 
 # Expand (§ 6.1 stage 1: it builds in its sector): below the cartel's share, private ownership stands, the
 # investment pool holds money, and its seat can take a level of one of its building types.

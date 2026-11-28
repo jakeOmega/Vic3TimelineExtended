@@ -90,7 +90,7 @@ import private_actors_config as cfg  # noqa: E402
 
 KINDS = (
     "Company Types", "Buildings", "PM Groups", "PMs", "Goods", "Technologies", "Laws", "Law Groups",
-    "Building Groups", "Pop Needs", "Character Traits", "Ideologies",
+    "Building Groups", "Pop Needs", "Character Traits", "Ideologies", "Interest Groups",
 )
 COVERED_GROUPS = tuple(cfg.LAW_TABLE)
 
@@ -109,6 +109,10 @@ MODIFIER_TYPES_DIR = Path("common/modifier_type_definitions")
 CARTEL_PREFIX = "te_pa_cartel_"
 CARTEL_SECRET_PREFIX = "te_pa_cartel_secret_"
 FOUNDATION_PREFIX = "te_pa_found_"
+# Politics at home (Task 5a): patronage, one country modifier an interest group type (organize_loc files their names
+# by this prefix, which the type's own key, ig_<name>, completes).
+PATRONAGE_PREFIX = "te_pa_patronage_"
+PATRONAGE_ICON = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
 CARTEL_MULT_PREFIX = "te_pa_cm_"
 CARTEL_ICON = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
 FOUNDATION_ICON = "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
@@ -122,6 +126,7 @@ HEADER = (
 GOOD_SLOTS = ("in1", "in2", "out")
 GOOD_UNKNOWN_KEY = "te_pa_good_unknown"
 LAW_UNKNOWN_KEY = "te_pa_law_unknown"
+IG_UNKNOWN_KEY = "te_pa_ig_unknown"
 STANCE_MIN, STANCE_MAX = -2, 2
 
 _INPUT_RE = re.compile(r"goods_input_(\w+)_add")
@@ -240,6 +245,7 @@ class Data:
     pop_needs: dict
     character_traits: dict = None
     ideologies: dict = None
+    interest_groups: dict = None
 
     @classmethod
     def from_state(cls, mod_state) -> "Data":
@@ -247,7 +253,7 @@ class Data:
             return mod_state.get_data(kind) or {}
         return cls(get("Company Types"), get("Buildings"), get("PM Groups"), get("PMs"), get("Goods"),
                    get("Technologies"), get("Laws"), get("Building Groups"), get("Pop Needs"),
-                   get("Character Traits"), get("Ideologies"))
+                   get("Character Traits"), get("Ideologies"), get("Interest Groups"))
 
     def personality_traits(self) -> list[str]:
         """Every trait of type personality, by key (§ 5.3 reads only these)."""
@@ -507,6 +513,8 @@ class Plan:
     registered: frozenset = frozenset()
     # A loc key's English text, the mod's over vanilla's (entity_loc), for the generated names; None: unread
     loc: object = None
+    # Every interest group type (vanilla's and the mod's), by key; index = position + 1 (Task 5a's patronage)
+    igs: tuple = ()
 
     def good_index(self, good: str) -> int:
         return self.goods.index(good) + 1
@@ -522,6 +530,14 @@ class Plan:
         """``building_<b>_throughput_add`` for each sector building no other definition registers."""
         names = {f"{b}_throughput_add" for s in self.sectors for b in s.buildings}
         return sorted(names - self.registered)
+
+    def ig_index(self, ig: str) -> int:
+        return self.igs.index(ig) + 1
+
+    def missing_pol_str_types(self) -> list[str]:
+        """``interest_group_<ig>_pol_str_mult`` for each interest group type no definition registers (vanilla
+        registers its eight; one the mod adds would need it)."""
+        return sorted({f"interest_group_{ig}_pol_str_mult" for ig in self.igs} - self.registered)
 
     def read_goods(self) -> list[str]:
         """The goods some sector reads a price of: its inputs and its main output when not local."""
@@ -588,10 +604,14 @@ def build_plan(mod_state, root: Path = ROOT) -> Plan:
     for s in sectors:
         if not s.company.startswith("company_"):
             raise ValueError(f"{s.company}: organize_loc files the trust's modifier names by te_pa_*_company_")
+    igs = tuple(sorted(data.interest_groups or {}))
+    for ig in igs:
+        if not ig.startswith("ig_"):
+            raise ValueError(f"{ig}: organize_loc files the patronage modifiers' names by {PATRONAGE_PREFIX}ig_")
     techs = sorted({t for s in sectors for t in s.techs})
     return Plan(sectors, sorted(data.goods), techs, law_catalog(data),
                 tuple(data.personality_traits()), tuple(data.character_ideologies()), registered_types(root),
-                entity_loc(root))
+                entity_loc(root), igs)
 
 
 # ---------------------------------------------------------------------------
@@ -1209,6 +1229,14 @@ STATIC_MODIFIERS_PREAMBLE = """\
 """
 
 
+PATRONAGE_MODIFIERS_PREAMBLE = """\
+# Politics at home (Task 5a, spec § 8.3): patronage, one country modifier an interest group type, vanilla's and the
+# mod's. The firms' money for a group raises its political strength, at most patronage_cap; applied with the
+# country's patronage total for the group over its full figure, at most 1 (te_pa_gen_patronage_quarter, from the
+# quarter only). A total decays once the money stops (te_pa_politics_effects.txt).
+"""
+
+
 def _modifier_value(number: float) -> str:
     return _fmt(number)
 
@@ -1228,6 +1256,14 @@ def render_static_modifiers(plan: Plan) -> str:
             f"\tstate_mortality_mult = {_modifier_value(-cfg.NUMBERS['found_mortality'])}",
             "}",
         ]))
+    parts.append(PATRONAGE_MODIFIERS_PREAMBLE)
+    for ig in plan.igs:
+        parts.append(_block([
+            f"{PATRONAGE_PREFIX}{ig} = {{",
+            f"\ticon = {PATRONAGE_ICON}",
+            f"\tinterest_group_{ig}_pol_str_mult = {_modifier_value(cfg.NUMBERS['patronage_cap'])}",
+            "}",
+        ]))
     return "\n".join(parts)
 
 
@@ -1243,6 +1279,8 @@ def render_modifier_types(plan: Plan) -> str:
     parts = [HEADER, MODIFIER_TYPES_PREAMBLE]
     for name in plan.missing_throughput_types():
         parts.append(_block([f"{name} = {{", "\tcolor = good", "\tpercent = yes", "\tdecimals = 1", "}"]))
+    for name in plan.missing_pol_str_types():
+        parts.append(_block([f"{name} = {{", "\tcolor = neutral", "\tpercent = yes", "\tdecimals = 0", "}"]))
     return "\n".join(parts)
 
 
@@ -1292,6 +1330,13 @@ def loc_entries(plan: Plan) -> dict[str, str]:
         building = _splice(plan, name.removesuffix("_throughput_add"))
         entries[name] = _name(plan, f"{building} [concept_throughput]", True)
         entries[f"{name}_desc"] = f'0 "A bonus or penalty to both input and output of {building} buildings"'
+    for ig in plan.igs:
+        entries[f"{PATRONAGE_PREFIX}{ig}"] = _name(plan, f"$te_pa_patronage_word$: {_splice(plan, ig)}", False)
+        entries[f"{PATRONAGE_PREFIX}{ig}_desc"] = '0 "$te_pa_patronage_desc$"'
+    for name in plan.missing_pol_str_types():
+        group = _splice(plan, name.removeprefix("interest_group_").removesuffix("_pol_str_mult"))
+        entries[name] = _name(plan, f"{group} [concept_political_strength]", True)
+        entries[f"{name}_desc"] = f'0 "The political strength of the {group}"'
     return entries
 
 
@@ -1299,6 +1344,116 @@ def render_loc(plan: Plan) -> str:
     from organize_loc import _render_loc_file, section_label
 
     return _render_loc_file([(section_label(LOC_CATEGORY), loc_entries(plan))]).decode("utf-8-sig")
+
+POLITICS_PREAMBLE = """\
+# Politics at home (Task 5a, spec §§ 8.2, 8.3; te_pa_politics_effects.txt calls these). One branch or line an
+# interest group type (vanilla's and the mod's, numbered by key from 1): the country's patronage total for each
+# (te_pa_pat_<group>, pounds as the money counts), its modifier's multiplier (te_pa_pm_<group>), the campaign
+# money this election to the party a group leads (te_pa_cmp_<group>) and the momentum it bought (te_pa_cmm_<group>).
+# The per-group work is the hand-written helpers' (te_pa_<x>_one = { IG N }); these only name every group.
+"""
+
+
+def render_politics_effects(plan: Plan) -> str:
+    def args(ig: str, n: int, with_n: bool) -> str:
+        return f"IG = {ig} N = {n}" if with_n else f"IG = {ig}"
+
+    def per_group(name: str, helper: str, comment: list[str], with_n: bool = False) -> str:
+        lines = comment + [f"{name} = {{"]
+        lines += [f"\t{helper} = {{ {args(ig, n, with_n)} }}" for n, ig in enumerate(plan.igs, 1)]
+        return _block(lines + ["}"])
+
+    def by_type(name: str, scope: str, helper: str, comment: list[str]) -> str:
+        lines = comment + [f"{name} = {{"]
+        for n, ig in enumerate(plan.igs, 1):
+            keyword = "if" if n == 1 else "else_if"
+            lines += [
+                f"\t{keyword} = {{",
+                f"\t\tlimit = {{ scope:{scope} ?= {{ is_interest_group_type = {ig} }} }}",
+                f"\t\t{helper} = {{ {args(ig, n, False)} }}",
+                "\t}",
+            ]
+        return _block(lines + ["}"])
+
+    quarter = [
+        "# Scope: a country, its quarter (te_pa_politics_quarter, the patronage modifiers' one refresh site, with the",
+        "# country as ROOT, which a multiplier resolves against). Each group's total decays and its multiplier is",
+        "# written (te_pa_pat_quarter_one), then its modifier is replaced, at that multiplier while it is above 0.",
+        "te_pa_gen_patronage_quarter = {",
+    ]
+    remove_all = [
+        "# Scope: a country. Every group's patronage modifier off: the teardown (the rule switched off).",
+        "te_pa_gen_patronage_remove_all = {",
+    ]
+    for n, ig in enumerate(plan.igs, 1):
+        name, mult = f"{PATRONAGE_PREFIX}{ig}", f"te_pa_pm_{ig}"
+        quarter += [
+            f"\tte_pa_pat_quarter_one = {{ IG = {ig} }}",
+            f"\tremove_modifier = {name}",
+            "\tif = {",
+            f"\t\tlimit = {{ has_variable = {mult} var:{mult} > 0 }}",
+            f"\t\tadd_modifier = {{ name = {name} multiplier = var:{mult} }}",
+            "\t}",
+        ]
+        remove_all.append(f"\tremove_modifier = {name}")
+    parts = [
+        _block(quarter + ["}"]),
+        _block(remove_all + ["}"]),
+        by_type("te_pa_gen_pat_add", "te_pa_cm_ig", "te_pa_pat_add_one", [
+            "# Scope: a country, scope:te_pa_cm_ig the interest group a firm's patronage goes to: the money (staged",
+            "# te_pa_cm_units) onto its total."]),
+        by_type("te_pa_gen_pat_take", "te_pa_cm_ig", "te_pa_pat_take_one", [
+            "# Scope: a country, scope:te_pa_cm_ig a group whose secret patronage was exposed: what it bought (staged",
+            "# te_pa_cm_take) off its total."]),
+        by_type("te_pa_gen_cmp_add", "te_pa_cm_bet_ig", "te_pa_cmp_add_one", [
+            "# Scope: a country, scope:te_pa_cm_bet_ig the largest member of the party a firm's campaign money backs",
+            "# (te_pa_cm_pick): the money and the momentum it bought onto the party's record for this election."]),
+        per_group("te_pa_gen_campaign_clear", "te_pa_cmp_clear_one", [
+            "# Scope: a country, an election settled (te_pa_election_settle): every party's record of campaign money."]),
+        per_group("te_pa_gen_pol_view_rebuild", "te_pa_pol_view_one", [
+            "# Scope: a country (scope:te_pa_pv_home): the Politics section's rows, one a group with money on it."],
+            with_n=True),
+    ]
+    return "\n".join(parts)
+
+
+def render_politics_values(plan: Plan) -> str:
+    stance = [
+        "# Scope: an interest group, with scope:te_pa_stake_firm a firm: the group's stance on the firm's law at",
+        "# stake (te_pa_stake_law, the law table's number), +2 strongly approves to -2 strongly disapproves",
+        "# (law_stance, which reads its ideologies and ignores the law in force); 0 with no stake.",
+        "te_pa_gen_ig_stake_stance = {",
+        "\tvalue = 0",
+    ]
+    for law in plan.laws:
+        stance += [
+            "\tif = {",
+            f"\t\tlimit = {{ scope:te_pa_stake_firm ?= {{ var:te_pa_stake_law ?= {law.index} }} }}",
+            f"\t\tif = {{ limit = {{ law_stance = {{ law = law_type:{law.key} value > approve }} }} value = 2 }}",
+            f"\t\telse_if = {{ limit = {{ law_stance = {{ law = law_type:{law.key} value > neutral }} }} value = 1 }}",
+            f"\t\telse_if = {{ limit = {{ law_stance = {{ law = law_type:{law.key} value < disapprove }} }} value = -2 }}",
+            f"\t\telse_if = {{ limit = {{ law_stance = {{ law = law_type:{law.key} value < neutral }} }} value = -1 }}",
+            "\t}",
+        ]
+    index = ["# Scope: an interest group. Its type's number (the groups by key, from 1), 0 for none listed.",
+             "te_pa_gen_ig_n = {", "\tvalue = 0"]
+    for n, ig in enumerate(plan.igs, 1):
+        keyword = "if" if n == 1 else "else_if"
+        index.append(f"\t{keyword} = {{ limit = {{ is_interest_group_type = {ig} }} value = {n} }}")
+    return _block(stance + ["}"]) + "\n" + _block(index + ["}"])
+
+
+def render_politics_triggers(plan: Plan) -> str:
+    lines = [
+        "# Scope: a country. The law numbered by its variable VAR (the law table's number) is in force: the enactment",
+        "# its firms' sides were on passed (te_pa_sides_settle, VAR = te_pa_side_law), or the one the law_progress",
+        "# self-check watched did.",
+        "te_pa_gen_law_n_in_force = {",
+        "\tOR = {",
+    ]
+    for law in plan.laws:
+        lines.append(f"\t\tAND = {{ var:$VAR$ ?= {law.index} has_law = law_type:{law.key} }}")
+    return _block(lines + ["\t}", "}"])
 
 
 def render_effects(plan: Plan) -> str:
@@ -1317,6 +1472,7 @@ def render_effects(plan: Plan) -> str:
         render_found_pick(plan),
         EXPAND_PREAMBLE + render_expand(plan),
         CHARTER_PREAMBLE + render_charter(plan),
+        POLITICS_PREAMBLE + render_politics_effects(plan),
     ])
 
 
@@ -1349,6 +1505,7 @@ def render_triggers(plan: Plan) -> str:
     parts.append(render_enacting_groups(plan))
     parts.append(render_trust_triggers(plan))
     parts.append(render_charter_trigger(plan))
+    parts.append(render_politics_triggers(plan))
     return "\n".join(parts)
 
 
@@ -1457,20 +1614,23 @@ def render_values(plan: Plan) -> str:
     parts.append(render_temperament(plan))
     parts.append(render_seat_values(plan))
     parts.append(render_trust_values(plan))
+    parts.append(render_politics_values(plan))
     return "\n".join(parts)
 
 
 def render_custom_loc(plan: Plan) -> str:
-    names = {"good": plan.goods, "law": [law.key for law in plan.laws]}
-    unknown = {"good": GOOD_UNKNOWN_KEY, "law": LAW_UNKNOWN_KEY}
+    names = {"good": plan.goods, "law": [law.key for law in plan.laws], "ig": list(plan.igs)}
+    unknown = {"good": GOOD_UNKNOWN_KEY, "law": LAW_UNKNOWN_KEY, "ig": IG_UNKNOWN_KEY}
     parts = [
         HEADER,
-        "# A good's or a law's name from the index a firm's readings carry, read from a script container that\n"
-        "# holds a copy (private_actors_config.NAME_LOCS): [ScriptContainer.GetCustom('<key>')]. Goods are\n"
-        "# numbered by key from 1, laws in the law table's order from 1; a name key is the good's or law's own.\n",
+        "# A good's, a law's or an interest group's name from the index a firm's readings carry, read from a script\n"
+        "# container that holds a copy, or from a country (private_actors_config.NAME_LOCS):\n"
+        "# [ScriptContainer.GetCustom('<key>')], [Country.GetCustom('<key>')]. Goods and interest groups are numbered\n"
+        "# by key from 1, laws in the law table's order from 1; a name key is the good's, law's or group's own.\n",
     ]
     for entry in cfg.NAME_LOCS:
-        lines = [f"# {entry.kind} from var:{entry.variable}", f"{entry.key} = {{", "\ttype = container", "\trandom_valid = no"]
+        lines = [f"# {entry.kind} from var:{entry.variable}", f"{entry.key} = {{", f"\ttype = {entry.scope}",
+                 "\trandom_valid = no"]
         for index, key in enumerate(names[entry.kind], start=1):
             lines += [
                 "\ttext = {",

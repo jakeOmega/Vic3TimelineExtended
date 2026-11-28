@@ -102,6 +102,9 @@ SECTIONS = {
         "heir_ed_*",
         # Liquid Democracy with Neural Lace (te_liquid_democracy_effects.txt)
         "te_continuous_vote",
+        # Private Actors' patronage: the firms' money for an interest group, one modifier a group, refreshed each
+        # quarter from the country's total for it (te_pa_gen_patronage_quarter, te_pa_politics_effects.txt)
+        "te_pa_patronage_*",
     ),
     "society": (
         # Inheritance: a dynasty's continuity (event outcome)
@@ -341,6 +344,8 @@ SOURCE_GROUPS = {
     # Barracks doctrine, heir education, Liquid Democracy
     "governance": ("te_officer_academies_standing", "te_political_commissars_indoctrination", "heir_ed_*",
                    "te_continuous_vote"),
+    # Private Actors: the firms' patronage of the interest groups
+    "private_actors": ("te_pa_patronage_*",),
     "family_measures": ("te_demog_ms_*",),
     "civil_rights": ("cr_*",),
     # A colonial subject's overlord in decline, a great power's stance on colonialism
@@ -405,9 +410,11 @@ TYPE_ROWS = {
         ),
         "interest_groups": (
             # The eight approvals: tax-code views, resettlement's politics,
-            # demographic measures, pension positions
+            # demographic measures, pension positions; the eight groups'
+            # political strength (Private Actors' patronage, the armed forces'
+            # standing from training)
             "interest_group_ig_*_approval_add",
-            "interest_group_ig_armed_forces_pol_str_mult", "interest_group_ig_armed_forces_pop_attraction_mult",
+            "interest_group_ig_*_pol_str_mult", "interest_group_ig_armed_forces_pop_attraction_mult",
             "interest_group_in_government_attraction_mult",
         ),
     },

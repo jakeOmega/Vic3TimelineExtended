@@ -2,9 +2,10 @@
 # Private Actors, the firms' sectors: docs/superpowers/specs/2026-11-28-actors-firms-design.md
 # (§ 5.1, § 8.1, § 10.1). Hand-set inputs: scripts/generators/private_actors_config.py.
 
-# A good's or a law's name from the index a firm's readings carry, read from a script container that
-# holds a copy (private_actors_config.NAME_LOCS): [ScriptContainer.GetCustom('<key>')]. Goods are
-# numbered by key from 1, laws in the law table's order from 1; a name key is the good's or law's own.
+# A good's, a law's or an interest group's name from the index a firm's readings carry, read from a script
+# container that holds a copy, or from a country (private_actors_config.NAME_LOCS):
+# [ScriptContainer.GetCustom('<key>')], [Country.GetCustom('<key>')]. Goods and interest groups are numbered
+# by key from 1, laws in the law table's order from 1; a name key is the good's, law's or group's own.
 
 # good from var:te_pa_r_reason_good
 te_pa_row_reason_good = {
@@ -1216,6 +1217,309 @@ te_pa_ledger_law = {
 	}
 	text = {
 		trigger = { var:te_pa_l_law ?= 53 }
+		localization_key = law_publicly_funded_elections
+	}
+	text = {
+		localization_key = te_pa_law_unknown
+	}
+}
+
+# ig from var:te_pa_l_ig
+te_pa_ledger_ig = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_l_ig ?= 1 }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { var:te_pa_l_ig ?= 2 }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { var:te_pa_l_ig ?= 3 }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { var:te_pa_l_ig ?= 4 }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { var:te_pa_l_ig ?= 5 }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { var:te_pa_l_ig ?= 6 }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { var:te_pa_l_ig ?= 7 }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { var:te_pa_l_ig ?= 8 }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = te_pa_ig_unknown
+	}
+}
+
+# ig from var:te_pa_pv_ig
+te_pa_pv_ig_name = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_pv_ig ?= 1 }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { var:te_pa_pv_ig ?= 2 }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { var:te_pa_pv_ig ?= 3 }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { var:te_pa_pv_ig ?= 4 }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { var:te_pa_pv_ig ?= 5 }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { var:te_pa_pv_ig ?= 6 }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { var:te_pa_pv_ig ?= 7 }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { var:te_pa_pv_ig ?= 8 }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = te_pa_ig_unknown
+	}
+}
+
+# law from var:te_pa_side_law
+te_pa_pol_side_law = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_side_law ?= 1 }
+		localization_key = law_traditionalism
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 2 }
+		localization_key = law_interventionism
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 3 }
+		localization_key = law_agrarianism
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 4 }
+		localization_key = law_industry_banned
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 5 }
+		localization_key = law_extraction_economy
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 6 }
+		localization_key = law_laissez_faire
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 7 }
+		localization_key = law_cooperative_ownership
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 8 }
+		localization_key = law_command_economy
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 9 }
+		localization_key = law_no_workers_rights
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 10 }
+		localization_key = law_regulatory_bodies
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 11 }
+		localization_key = law_worker_protections
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 12 }
+		localization_key = law_child_labor_allowed
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 13 }
+		localization_key = law_restricted_child_labor
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 14 }
+		localization_key = law_compulsory_primary_school
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 15 }
+		localization_key = law_guild_system
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 16 }
+		localization_key = law_combination_acts
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 17 }
+		localization_key = law_anti_strike_laws
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 18 }
+		localization_key = law_right_to_associate
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 19 }
+		localization_key = law_corporatized_unions
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 20 }
+		localization_key = law_factory_councils
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 21 }
+		localization_key = law_no_ministry_of_labor
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 22 }
+		localization_key = law_pro_labor_ministry_of_labor
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 23 }
+		localization_key = law_pro_capital_ministry_of_labor
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 24 }
+		localization_key = law_guilds_chartered_monopolies
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 25 }
+		localization_key = law_freedom_of_contract
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 26 }
+		localization_key = law_trust_busting
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 27 }
+		localization_key = law_regulated_utilities
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 28 }
+		localization_key = law_dirigisme
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 29 }
+		localization_key = law_command_cooperative_economy
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 30 }
+		localization_key = law_unrestricted_extraction
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 31 }
+		localization_key = law_fossil_expansion_moratorium
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 32 }
+		localization_key = law_managed_fossil_phaseout
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 33 }
+		localization_key = law_unrestricted_automation
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 34 }
+		localization_key = law_robot_tax
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 35 }
+		localization_key = law_human_labor_quotas
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 36 }
+		localization_key = law_automation_dividend
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 37 }
+		localization_key = law_no_ip_protection
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 38 }
+		localization_key = law_creative_commons
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 39 }
+		localization_key = law_traditional_ip_protection
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 40 }
+		localization_key = law_strict_ip_protection
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 41 }
+		localization_key = law_open_source_innovation
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 42 }
+		localization_key = law_state_intellectual_property
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 43 }
+		localization_key = law_unregulated_banking
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 44 }
+		localization_key = law_free_mutual_banking
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 45 }
+		localization_key = law_universal_banking_light_prudence
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 46 }
+		localization_key = law_prudential_narrow_banking
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 47 }
+		localization_key = law_directed_credit_development_banks
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 48 }
+		localization_key = law_state_owned_banking
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 49 }
+		localization_key = law_central_bank_independence
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 50 }
+		localization_key = law_no_campaign_finance_laws
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 51 }
+		localization_key = law_unregulated_donations
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 52 }
+		localization_key = law_donation_limits
+	}
+	text = {
+		trigger = { var:te_pa_side_law ?= 53 }
 		localization_key = law_publicly_funded_elections
 	}
 	text = {

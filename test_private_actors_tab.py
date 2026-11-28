@@ -190,7 +190,8 @@ class StructureTest(unittest.TestCase):
         body = _type_body(self.gui, "te_pa_tab_body")
         content = _no_comments(body[body.index('block "te_pa_tab_layout"'):])
         self.assertEqual(re.findall(r"^\t+(te_pa_\w+_panel) = \{\}", content, re.M),
-                         ["te_pa_overview_panel", "te_pa_roster_panel", "te_pa_ledger_panel"])
+                         ["te_pa_overview_panel", "te_pa_roster_panel", "te_pa_politics_panel",
+                          "te_pa_ledger_panel"])
         self.assertIn("GetVariableSystem.Set('te_popup', 'help_private_actors')", body)
         self.assertIn('blockoverride "tab_open_journal" {}', body)
         self.assertIn("te_window_private_actors_tab_sgui", body[body.index('blockoverride "tab_gate"'):])
@@ -198,8 +199,10 @@ class StructureTest(unittest.TestCase):
     def test_the_columns(self):
         columns = assert_wide_matches_narrow(self, "te_pa_wide_sections",
                                              layout=("te_pa_tab_body", "te_pa_tab_layout"))
-        # a section a column, in the tab's order; none hides while the tab is open
-        self.assertEqual(columns, [["te_pa_overview_panel"], ["te_pa_roster_panel"], ["te_pa_ledger_panel"]])
+        # in the tab's order, the roster a column of its own and Politics above the ledger (Task 5a); none hides
+        # while the tab is open
+        self.assertEqual(columns, [["te_pa_overview_panel"], ["te_pa_roster_panel"],
+                                   ["te_pa_politics_panel", "te_pa_ledger_panel"]])
         self.assertNotIn("_visible", _type_body(self.gui, "te_pa_wide_sections"))
 
     def test_the_registry(self):
@@ -364,6 +367,11 @@ class StructureTest(unittest.TestCase):
                                                                   "te_pa_ledger_open", "te_pa_firm_open_"}
         keys = {k for k in keys if not k.startswith(("te_pa_r_", "te_pa_l_", "te_pa_tab_", "te_pa_row_holdings"))
                 and not k.endswith("_sgui")}
+        # Task 5a's Politics section: the guarded readers it calls (te_pa_pol_*, te_pa_politics_values.txt), its list
+        # and its rows' variables
+        politics = os.path.join(REPO, "common", "script_values", "te_pa_politics_values.txt")
+        values = set(re.findall(r"(?m)^(te_pa_\w+) = ", _read(politics)))
+        keys = {k for k in keys - values - {"te_pa_pol_view"} if not k.startswith("te_pa_pv_")}
         self.assertGreater(len(keys), 60)
         for key in sorted(keys):
             with self.subTest(key=key):

@@ -168,6 +168,47 @@ te_pa_ledger_line = {
 		trigger = { var:te_pa_l_verb ?= 39 }
 		localization_key = te_pa_ledger_verb_39
 	}
+	# Task 5a's politics (te_pa_politics_effects.txt lists 40-49)
+	text = {
+		trigger = { var:te_pa_l_verb ?= 40 }
+		localization_key = te_pa_ledger_verb_40
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 41 }
+		localization_key = te_pa_ledger_verb_41
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 42 }
+		localization_key = te_pa_ledger_verb_42
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 43 }
+		localization_key = te_pa_ledger_verb_43
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 44 }
+		localization_key = te_pa_ledger_verb_44
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 45 }
+		localization_key = te_pa_ledger_verb_45
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 46 }
+		localization_key = te_pa_ledger_verb_46
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 47 }
+		localization_key = te_pa_ledger_verb_47
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 48 }
+		localization_key = te_pa_ledger_verb_48
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 49 }
+		localization_key = te_pa_ledger_verb_49
+	}
 	text = {
 		localization_key = te_pa_ledger_verb_unknown
 	}
@@ -657,5 +698,19 @@ te_pa_move_default_now = {
 	}
 	text = {
 		localization_key = te_pa_default_stand
+	}
+}
+
+# A Politics row's interest group in or out of government (te_pa_pv_gov; Task 5a, te_pa_pol_view_one), and what that
+# means for the firms backing it, on the row's hover.
+te_pa_pol_row_gov_text = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_pv_gov ?= 1 }
+		localization_key = te_pa_pol_row_gov
+	}
+	text = {
+		localization_key = te_pa_pol_row_out
 	}
 }

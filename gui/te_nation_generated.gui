@@ -9,7 +9,7 @@
 
 ### The governance section's list.
 template te_nation_list_governance {
-	visible = "[And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_governance').GetValue, '(CFixedPoint)0'), Or(Or(EqualTo_string(TimedModifier.GetName, Localize('heir_ed_ideology_focus_active')), Or(EqualTo_string(TimedModifier.GetName, Localize('heir_ed_ig_focus_active')), EqualTo_string(TimedModifier.GetName, Localize('heir_ed_trait_focus_active')))), Or(EqualTo_string(TimedModifier.GetName, Localize('te_continuous_vote')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_officer_academies_standing')), EqualTo_string(TimedModifier.GetName, Localize('te_political_commissars_indoctrination'))))))]"
+	visible = "[Or(And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_governance').GetValue, '(CFixedPoint)0'), Or(Or(EqualTo_string(TimedModifier.GetName, Localize('heir_ed_ideology_focus_active')), Or(EqualTo_string(TimedModifier.GetName, Localize('heir_ed_ig_focus_active')), EqualTo_string(TimedModifier.GetName, Localize('heir_ed_trait_focus_active')))), Or(EqualTo_string(TimedModifier.GetName, Localize('te_continuous_vote')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_officer_academies_standing')), EqualTo_string(TimedModifier.GetName, Localize('te_political_commissars_indoctrination')))))), And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_private_actors').GetValue, '(CFixedPoint)0'), Or(Or(Or(EqualTo_string(TimedModifier.GetName, Localize('te_pa_patronage_ig_armed_forces')), EqualTo_string(TimedModifier.GetName, Localize('te_pa_patronage_ig_devout'))), Or(EqualTo_string(TimedModifier.GetName, Localize('te_pa_patronage_ig_industrialists')), EqualTo_string(TimedModifier.GetName, Localize('te_pa_patronage_ig_intelligentsia')))), Or(Or(EqualTo_string(TimedModifier.GetName, Localize('te_pa_patronage_ig_landowners')), EqualTo_string(TimedModifier.GetName, Localize('te_pa_patronage_ig_petty_bourgeoisie'))), Or(EqualTo_string(TimedModifier.GetName, Localize('te_pa_patronage_ig_rural_folk')), EqualTo_string(TimedModifier.GetName, Localize('te_pa_patronage_ig_trade_unions')))))))]"
 }
 
 ### The society section's list.
@@ -202,6 +202,41 @@ types te_nation_generated_types
 				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_interest_group_ig_armed_forces_pol_str_mult_count'), '(CFixedPoint)0' )]"
 				text = "te_nation_type_interest_group_ig_armed_forces_pol_str_mult"
 				tooltip = "te_nation_type_interest_group_ig_armed_forces_pol_str_mult_tt"
+			}
+			te_nation_row = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_interest_group_ig_devout_pol_str_mult_count'), '(CFixedPoint)0' )]"
+				text = "te_nation_type_interest_group_ig_devout_pol_str_mult"
+				tooltip = "te_nation_type_interest_group_ig_devout_pol_str_mult_tt"
+			}
+			te_nation_row = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_interest_group_ig_industrialists_pol_str_mult_count'), '(CFixedPoint)0' )]"
+				text = "te_nation_type_interest_group_ig_industrialists_pol_str_mult"
+				tooltip = "te_nation_type_interest_group_ig_industrialists_pol_str_mult_tt"
+			}
+			te_nation_row = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_interest_group_ig_intelligentsia_pol_str_mult_count'), '(CFixedPoint)0' )]"
+				text = "te_nation_type_interest_group_ig_intelligentsia_pol_str_mult"
+				tooltip = "te_nation_type_interest_group_ig_intelligentsia_pol_str_mult_tt"
+			}
+			te_nation_row = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_interest_group_ig_landowners_pol_str_mult_count'), '(CFixedPoint)0' )]"
+				text = "te_nation_type_interest_group_ig_landowners_pol_str_mult"
+				tooltip = "te_nation_type_interest_group_ig_landowners_pol_str_mult_tt"
+			}
+			te_nation_row = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_interest_group_ig_petty_bourgeoisie_pol_str_mult_count'), '(CFixedPoint)0' )]"
+				text = "te_nation_type_interest_group_ig_petty_bourgeoisie_pol_str_mult"
+				tooltip = "te_nation_type_interest_group_ig_petty_bourgeoisie_pol_str_mult_tt"
+			}
+			te_nation_row = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_interest_group_ig_rural_folk_pol_str_mult_count'), '(CFixedPoint)0' )]"
+				text = "te_nation_type_interest_group_ig_rural_folk_pol_str_mult"
+				tooltip = "te_nation_type_interest_group_ig_rural_folk_pol_str_mult_tt"
+			}
+			te_nation_row = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_interest_group_ig_trade_unions_pol_str_mult_count'), '(CFixedPoint)0' )]"
+				text = "te_nation_type_interest_group_ig_trade_unions_pol_str_mult"
+				tooltip = "te_nation_type_interest_group_ig_trade_unions_pol_str_mult_tt"
 			}
 			te_nation_row = {
 				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_interest_group_ig_armed_forces_pop_attraction_mult_count'), '(CFixedPoint)0' )]"

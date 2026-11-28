@@ -85,6 +85,8 @@ te_pa_monthly = {
 		# declares, so a new move starts its six months next month.
 		te_pa_move_monthly = yes
 		te_pa_move_settle = yes
+		# Task 5a: an election a month past its end is settled; the tab's campaign flag (te_pa_politics_effects.txt).
+		te_pa_politics_monthly = yes
 		te_pa_ov_refresh = yes
 		te_pa_debug_monthly = yes
 	}
@@ -168,6 +170,8 @@ te_pa_turn = {
 	set_variable = { name = te_pa_trade value = te_pa_trade_stance_value }
 	te_pa_score_goals = yes
 	te_pa_choose_goal = yes
+	# Task 5a: the country's sides checked, and the firm's law at stake read, before it acts (te_pa_politics_effects.txt).
+	te_pa_politics_turn = yes
 	te_pa_act = yes
 	te_pa_expose_rolls = yes
 	te_pa_notices = yes
@@ -383,15 +387,20 @@ te_pa_notices = {
 # Country scope (scope:te_pa_home saved by te_pa_monthly).
 te_pa_quarter = {
 	te_pa_cartels_rebuild = yes
+	# Task 5a: the sides checked and the presses' list rebuilt before the firms (te_pa_politics_effects.txt).
+	te_pa_politics_quarter_start = yes
 	every_company = {
 		limit = { has_variable = te_pa_init }
 		te_pa_trust_quarter = yes
+		te_pa_politics_firm_quarter = yes
 		te_pa_accrue = yes
 		te_pa_row_sync = yes
 	}
 	te_pa_rows_sweep = yes
 	# An AI government's action against a cartel whose price passes its line (§ 12.1).
 	te_pa_sa_ai_quarter = yes
+	# Task 5a: the sides ranked, the patronage modifiers' refresh, the Politics section, an AI government's press.
+	te_pa_politics_quarter = yes
 }
 
 # Company scope. A quarter of a year's Funds (a claim on the investment pool: nothing moves), Connections and
@@ -466,6 +475,12 @@ te_pa_row_sync = {
 		set_variable = { name = te_pa_inquiry_shown value = 1 }
 	}
 	set_variable = { name = te_pa_levy_shown value = te_pa_levy_shown_value }
+	# Task 5a: what it has put behind its side of the law being enacted (0 for a firm that has spent on none).
+	set_variable = { name = te_pa_side_shown value = 0 }
+	if = {
+		limit = { te_pa_side_on_current = yes }
+		set_variable = { name = te_pa_side_shown value = te_pa_v_side_spent }
+	}
 	var:te_pa_row ?= {
 		set_variable = { name = te_pa_r_firm value = scope:te_pa_sync_firm }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_goal TO = te_pa_r_goal }
@@ -533,6 +548,11 @@ te_pa_row_sync = {
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_inquiry_shown TO = te_pa_r_inquiry }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_levy TO = te_pa_r_levy }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_levy_shown TO = te_pa_r_levy_take }
+		# Task 5a: what it has put behind its side of the law being enacted (and which side), its campaign money in
+		# all.
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_side_shown TO = te_pa_r_side_spent }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_side_sign TO = te_pa_r_side_sign }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_campaign_total TO = te_pa_r_cm_total }
 		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_seat TO = te_pa_r_seat }
 		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_exec TO = te_pa_r_exec }
 	}
@@ -705,6 +725,8 @@ te_pa_teardown = {
 	te_pa_trust_teardown = yes
 	# Task 4b: the declared move and its candidates (the alerts' conditions), and the actions' approval modifiers.
 	te_pa_actions_teardown = yes
+	# Task 5a: the patronage modifiers (country), the Politics section's rows and the presses' list.
+	te_pa_politics_teardown = yes
 	if = {
 		limit = { has_variable_list = te_pa_rows }
 		every_in_list = {
@@ -760,6 +782,8 @@ te_pa_clear_firm = {
 	}
 	# The trust's holdings (te_pa_trust_effects.txt): the cartel's modifier goes, the foundation outlasts the firm.
 	te_pa_trust_clear = yes
+	# Task 5a: its press, its side, its money and its wager (te_pa_politics_effects.txt).
+	te_pa_politics_clear = yes
 	if = {
 		limit = { has_variable = te_pa_init }
 		remove_variable = te_pa_init

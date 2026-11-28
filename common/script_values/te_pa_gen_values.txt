@@ -14,6 +14,7 @@ te_pa_gen_cartel_cut = 0.2
 te_pa_gen_cartel_wealth = 5
 te_pa_gen_found_education = 0.1
 te_pa_gen_found_mortality = 0.05
+te_pa_gen_patronage_cap = 0.2
 
 # Each good a sector reads: the home market's price over base, less 1, signed, built from both clamped
 # halves (scripting_best_practices.md § "Is it signed below base price?"). te_pa_gen_price_<good> is
@@ -6802,4 +6803,395 @@ te_pa_gen_enacting_law_index = {
 		else_if = { limit = { is_enacting_law = law_type:law_donation_limits } value = 52 }
 		else_if = { limit = { is_enacting_law = law_type:law_publicly_funded_elections } value = 53 }
 	}
+}
+
+# Scope: an interest group, with scope:te_pa_stake_firm a firm: the group's stance on the firm's law at
+# stake (te_pa_stake_law, the law table's number), +2 strongly approves to -2 strongly disapproves
+# (law_stance, which reads its ideologies and ignores the law in force); 0 with no stake.
+te_pa_gen_ig_stake_stance = {
+	value = 0
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 1 } }
+		if = { limit = { law_stance = { law = law_type:law_traditionalism value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditionalism value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditionalism value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditionalism value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 2 } }
+		if = { limit = { law_stance = { law = law_type:law_interventionism value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_interventionism value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_interventionism value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_interventionism value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 3 } }
+		if = { limit = { law_stance = { law = law_type:law_agrarianism value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_agrarianism value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_agrarianism value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_agrarianism value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 4 } }
+		if = { limit = { law_stance = { law = law_type:law_industry_banned value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_industry_banned value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_industry_banned value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_industry_banned value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 5 } }
+		if = { limit = { law_stance = { law = law_type:law_extraction_economy value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_extraction_economy value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_extraction_economy value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_extraction_economy value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 6 } }
+		if = { limit = { law_stance = { law = law_type:law_laissez_faire value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 7 } }
+		if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 8 } }
+		if = { limit = { law_stance = { law = law_type:law_command_economy value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_economy value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_economy value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_economy value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 9 } }
+		if = { limit = { law_stance = { law = law_type:law_no_workers_rights value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_workers_rights value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_workers_rights value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_workers_rights value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 10 } }
+		if = { limit = { law_stance = { law = law_type:law_regulatory_bodies value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulatory_bodies value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulatory_bodies value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulatory_bodies value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 11 } }
+		if = { limit = { law_stance = { law = law_type:law_worker_protections value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_worker_protections value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_worker_protections value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_worker_protections value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 12 } }
+		if = { limit = { law_stance = { law = law_type:law_child_labor_allowed value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_child_labor_allowed value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_child_labor_allowed value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_child_labor_allowed value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 13 } }
+		if = { limit = { law_stance = { law = law_type:law_restricted_child_labor value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_restricted_child_labor value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_restricted_child_labor value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_restricted_child_labor value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 14 } }
+		if = { limit = { law_stance = { law = law_type:law_compulsory_primary_school value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_compulsory_primary_school value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_compulsory_primary_school value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_compulsory_primary_school value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 15 } }
+		if = { limit = { law_stance = { law = law_type:law_guild_system value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_guild_system value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_guild_system value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_guild_system value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 16 } }
+		if = { limit = { law_stance = { law = law_type:law_combination_acts value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_combination_acts value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_combination_acts value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_combination_acts value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 17 } }
+		if = { limit = { law_stance = { law = law_type:law_anti_strike_laws value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_anti_strike_laws value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_anti_strike_laws value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_anti_strike_laws value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 18 } }
+		if = { limit = { law_stance = { law = law_type:law_right_to_associate value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_right_to_associate value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_right_to_associate value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_right_to_associate value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 19 } }
+		if = { limit = { law_stance = { law = law_type:law_corporatized_unions value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_corporatized_unions value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_corporatized_unions value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_corporatized_unions value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 20 } }
+		if = { limit = { law_stance = { law = law_type:law_factory_councils value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_factory_councils value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_factory_councils value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_factory_councils value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 21 } }
+		if = { limit = { law_stance = { law = law_type:law_no_ministry_of_labor value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_labor value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_labor value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_labor value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 22 } }
+		if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 23 } }
+		if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 24 } }
+		if = { limit = { law_stance = { law = law_type:law_guilds_chartered_monopolies value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_guilds_chartered_monopolies value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_guilds_chartered_monopolies value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_guilds_chartered_monopolies value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 25 } }
+		if = { limit = { law_stance = { law = law_type:law_freedom_of_contract value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_freedom_of_contract value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_freedom_of_contract value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_freedom_of_contract value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 26 } }
+		if = { limit = { law_stance = { law = law_type:law_trust_busting value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_trust_busting value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_trust_busting value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_trust_busting value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 27 } }
+		if = { limit = { law_stance = { law = law_type:law_regulated_utilities value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulated_utilities value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulated_utilities value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulated_utilities value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 28 } }
+		if = { limit = { law_stance = { law = law_type:law_dirigisme value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_dirigisme value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_dirigisme value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_dirigisme value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 29 } }
+		if = { limit = { law_stance = { law = law_type:law_command_cooperative_economy value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_cooperative_economy value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_cooperative_economy value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_cooperative_economy value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 30 } }
+		if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 31 } }
+		if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 32 } }
+		if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 33 } }
+		if = { limit = { law_stance = { law = law_type:law_unrestricted_automation value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_automation value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_automation value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_automation value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 34 } }
+		if = { limit = { law_stance = { law = law_type:law_robot_tax value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_robot_tax value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_robot_tax value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_robot_tax value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 35 } }
+		if = { limit = { law_stance = { law = law_type:law_human_labor_quotas value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_human_labor_quotas value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_human_labor_quotas value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_human_labor_quotas value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 36 } }
+		if = { limit = { law_stance = { law = law_type:law_automation_dividend value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_automation_dividend value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_automation_dividend value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_automation_dividend value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 37 } }
+		if = { limit = { law_stance = { law = law_type:law_no_ip_protection value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ip_protection value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ip_protection value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ip_protection value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 38 } }
+		if = { limit = { law_stance = { law = law_type:law_creative_commons value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_creative_commons value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_creative_commons value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_creative_commons value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 39 } }
+		if = { limit = { law_stance = { law = law_type:law_traditional_ip_protection value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditional_ip_protection value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditional_ip_protection value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditional_ip_protection value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 40 } }
+		if = { limit = { law_stance = { law = law_type:law_strict_ip_protection value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_strict_ip_protection value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_strict_ip_protection value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_strict_ip_protection value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 41 } }
+		if = { limit = { law_stance = { law = law_type:law_open_source_innovation value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_open_source_innovation value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_open_source_innovation value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_open_source_innovation value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 42 } }
+		if = { limit = { law_stance = { law = law_type:law_state_intellectual_property value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_intellectual_property value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_intellectual_property value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_intellectual_property value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 43 } }
+		if = { limit = { law_stance = { law = law_type:law_unregulated_banking value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_banking value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_banking value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_banking value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 44 } }
+		if = { limit = { law_stance = { law = law_type:law_free_mutual_banking value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_free_mutual_banking value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_free_mutual_banking value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_free_mutual_banking value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 45 } }
+		if = { limit = { law_stance = { law = law_type:law_universal_banking_light_prudence value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_universal_banking_light_prudence value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_universal_banking_light_prudence value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_universal_banking_light_prudence value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 46 } }
+		if = { limit = { law_stance = { law = law_type:law_prudential_narrow_banking value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_prudential_narrow_banking value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_prudential_narrow_banking value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_prudential_narrow_banking value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 47 } }
+		if = { limit = { law_stance = { law = law_type:law_directed_credit_development_banks value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_directed_credit_development_banks value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_directed_credit_development_banks value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_directed_credit_development_banks value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 48 } }
+		if = { limit = { law_stance = { law = law_type:law_state_owned_banking value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_owned_banking value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_owned_banking value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_owned_banking value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 49 } }
+		if = { limit = { law_stance = { law = law_type:law_central_bank_independence value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_central_bank_independence value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_central_bank_independence value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_central_bank_independence value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 50 } }
+		if = { limit = { law_stance = { law = law_type:law_no_campaign_finance_laws value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_campaign_finance_laws value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_campaign_finance_laws value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_campaign_finance_laws value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 51 } }
+		if = { limit = { law_stance = { law = law_type:law_unregulated_donations value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_donations value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_donations value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_donations value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 52 } }
+		if = { limit = { law_stance = { law = law_type:law_donation_limits value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_donation_limits value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_donation_limits value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_donation_limits value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { scope:te_pa_stake_firm ?= { var:te_pa_stake_law ?= 53 } }
+		if = { limit = { law_stance = { law = law_type:law_publicly_funded_elections value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_publicly_funded_elections value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_publicly_funded_elections value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_publicly_funded_elections value < neutral } } value = -1 }
+	}
+}
+
+# Scope: an interest group. Its type's number (the groups by key, from 1), 0 for none listed.
+te_pa_gen_ig_n = {
+	value = 0
+	if = { limit = { is_interest_group_type = ig_armed_forces } value = 1 }
+	else_if = { limit = { is_interest_group_type = ig_devout } value = 2 }
+	else_if = { limit = { is_interest_group_type = ig_industrialists } value = 3 }
+	else_if = { limit = { is_interest_group_type = ig_intelligentsia } value = 4 }
+	else_if = { limit = { is_interest_group_type = ig_landowners } value = 5 }
+	else_if = { limit = { is_interest_group_type = ig_petty_bourgeoisie } value = 6 }
+	else_if = { limit = { is_interest_group_type = ig_rural_folk } value = 7 }
+	else_if = { limit = { is_interest_group_type = ig_trade_unions } value = 8 }
 }

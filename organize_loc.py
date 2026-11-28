@@ -674,9 +674,11 @@ GENERATED_CATEGORIES = {
 
 # Private Actors' generated keys (gen_private_actors.py, te_pa_generated_l_english.yml): the trust's and the
 # foundation's modifiers, one a company type each (every company type's key starts company_, which the generator
-# asserts), and the throughput types it registers for sector buildings nobody else registers, read from its
-# definition file, whose names would otherwise go to BUILDINGS beside the hand-registered ones.
-PA_GENERATED_PREFIXES = ("te_pa_cartel_company_", "te_pa_cartel_secret_company_", "te_pa_found_company_")
+# asserts), the patronage modifiers, one an interest group type (every group's key starts ig_, asserted likewise),
+# and the throughput types it registers for sector buildings nobody else registers, read from its definition file,
+# whose names would otherwise go to BUILDINGS beside the hand-registered ones.
+PA_GENERATED_PREFIXES = ("te_pa_cartel_company_", "te_pa_cartel_secret_company_", "te_pa_found_company_",
+                         "te_pa_patronage_ig_")
 PA_GENERATED_TYPES_FILE = os.path.join("common", "modifier_type_definitions", "te_pa_gen_modifier_types.txt")
 _pa_generated_types_cache: dict = {}
 

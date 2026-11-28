@@ -1,0 +1,326 @@
+﻿# Private Actors, politics at home: the triggers (docs/systems/mod_systems/private_actors.md § Politics at Home;
+# spec §§ 8.2, 8.3, 8.5, 8.7; plan Task 5). Company scope unless noted. Each verb is a te_pa_can_<verb> trigger here
+# and a te_pa_do_<verb> effect in te_pa_politics_effects.txt; te_pa_act's lists name them. The numbers are
+# te_pa_politics_values.txt's.
+
+# ---------------------------------------------------------------------------
+# The Electoral Finance law (§ 8.3's table), country scope
+# ---------------------------------------------------------------------------
+
+# No Campaign Finance Laws (a country without a vote), or none of the group's laws: patronage only, open, uncapped.
+te_pa_ef_none = {
+	NOR = {
+		has_law = law_type:law_unregulated_donations
+		has_law = law_type:law_donation_limits
+		has_law = law_type:law_publicly_funded_elections
+	}
+}
+
+# Unregulated Donations: open and uncapped.
+te_pa_ef_open = {
+	has_law = law_type:law_unregulated_donations
+}
+
+# Donation Limits: open up to a cap for each firm, the excess in secret.
+te_pa_ef_limits = {
+	has_law = law_type:law_donation_limits
+}
+
+# Publicly Funded Elections: private campaign money is illegal; in secret only, at half effect.
+te_pa_ef_public = {
+	has_law = law_type:law_publicly_funded_elections
+}
+
+# Campaign money buys momentum for a party (§ 8.3's first form): the country is in an election campaign, under an
+# Electoral Finance law that has elections to buy. Probe 9's fallback (momentum_from_pulse BROKEN): make this
+# always = no, and patronage is the one form everywhere.
+te_pa_cm_momentum_form = {
+	in_election_campaign = yes
+	te_pa_ef_none = no
+}
+
+# ---------------------------------------------------------------------------
+# The firm's law at stake (te_pa_stake_pick)
+# ---------------------------------------------------------------------------
+
+# It has a law at stake: one of the law table's, or the trade policy (te_pa_stake_trade).
+te_pa_has_stake = {
+	OR = {
+		te_pa_v_stake_law > 0
+		var:te_pa_stake_trade ?= 1
+	}
+}
+
+# Its law at stake is the law its country is enacting (the side it takes there is te_pa_do_back_side's).
+te_pa_stake_is_enacting = {
+	te_pa_v_stake_law > 0
+	te_pa_enacting_law_firm >= te_pa_v_stake_law
+	te_pa_enacting_law_firm <= te_pa_v_stake_law
+}
+
+# It may spend campaign money at all under its country's law: under Publicly Funded Elections only in secret, which a
+# cautious executive won't risk (te_pa_cm_secret_bold).
+te_pa_cm_allowed = {
+	owner = { te_pa_private_ownership_ended = no }
+	trigger_if = {
+		limit = { owner = { te_pa_ef_public = yes } }
+		te_pa_v_bold >= te_pa_cm_secret_bold
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The verbs (te_pa_act's lists, te_pa_politics_effects.txt)
+# ---------------------------------------------------------------------------
+
+# Stall the law (§ 8.3; Task 4a's, widened): a law being enacted that it is against, or one that would outlaw its
+# cartel (§ 6.4); it has the Connections; a year has passed since its last stall; no firm has set this law back in
+# the last year (one setback a year a law from all firms together); and the enactment can take another setback
+# without failing outright (vanilla's guard, events/ministry_law_events.txt).
+te_pa_can_stall = {
+	owner = { enacting_any_law = yes }
+	OR = {
+		te_pa_gen_stance_enacting < 0
+		AND = {
+			te_pa_v_cartel > 0
+			te_pa_law_threatens_cartel = yes
+		}
+	}
+	te_pa_v_conn >= te_pa_stall_conn
+	trigger_if = {
+		limit = { has_variable = te_pa_stall_month }
+		te_pa_stall_since >= te_pa_stall_months
+	}
+	owner = {
+		te_pa_law_setback_open = yes
+		enactment_setback_count < max_setbacks_minus_one
+	}
+}
+
+# The quarter's stall (te_pa_trust_quarter): a cartel firm defends its cartel whatever its goal (§ 6.4), so a law
+# that would outlaw it can start and end between two turns; any other firm stalls at its turn only.
+te_pa_can_stall_cartel = {
+	te_pa_v_cartel > 0
+	te_pa_law_threatens_cartel = yes
+	te_pa_can_stall = yes
+}
+
+# Speed the law (§ 8.3): a law being enacted that it is for; the Connections; a year since its last speed; no firm
+# has sped this law in the last year (one progress a year a law from all firms together).
+te_pa_can_speed = {
+	owner = { enacting_any_law = yes }
+	te_pa_gen_stance_enacting > 0
+	te_pa_v_conn >= te_pa_speed_conn
+	trigger_if = {
+		limit = { has_variable = te_pa_speed_month }
+		te_pa_speed_since >= te_pa_speed_months
+	}
+	owner = { te_pa_law_progress_open = yes }
+}
+
+# Country scope. No firm has set back the law being enacted in the last year (te_pa_stall_law and its month,
+# te_pa_do_stall).
+te_pa_law_setback_open = {
+	te_pa_stall_law_recent < 1
+}
+
+# Country scope. No firm has sped the law being enacted in the last year.
+te_pa_law_progress_open = {
+	te_pa_speed_law_recent < 1
+}
+
+# Campaign money (§ 8.3) as a goal's verb: it has a law at stake that is not the law being enacted (its side on that
+# one is te_pa_do_back_side's, after the goal's verb, so it is not paid for twice in a turn), the law lets it spend,
+# and it can pay. Cheaper Inputs spends only where the trade policy taxes its imported inputs (§ 8.3's "a tariff on
+# its input": the tariffs themselves are Task 5b's).
+te_pa_can_campaign = {
+	te_pa_has_stake = yes
+	te_pa_stake_is_enacting = no
+	trigger_if = {
+		limit = { var:te_pa_goal ?= 1 }
+		var:te_pa_stake_trade ?= 1
+		var:te_pa_stake_sign ?= 1
+	}
+	te_pa_cm_allowed = yes
+	te_pa_can_afford = { AMOUNT = te_pa_cm_cost_full_value }
+}
+
+# Back its side on the law being enacted (§ 8.2), after the goal's verb, like the foundation: a firm whose goal is A
+# Friendly Law spends on its side every turn, a cartel firm against a law that would outlaw its cartel (§ 6.4) too;
+# a firm with another goal only on a stance of weight 2, and half as much (te_pa_back_side_size).
+te_pa_can_back_side = {
+	owner = {
+		enacting_any_law = yes
+		has_variable = te_pa_side_law
+		te_pa_side_law_enacting = yes
+	}
+	OR = {
+		te_pa_gen_stance_enacting > 0
+		te_pa_gen_stance_enacting < 0
+	}
+	OR = {
+		var:te_pa_goal ?= 4
+		te_pa_side_stance_size >= te_pa_side_weight_other
+		AND = {
+			te_pa_v_cartel > 0
+			te_pa_law_threatens_cartel = yes
+		}
+	}
+	te_pa_cm_allowed = yes
+	te_pa_can_afford = { AMOUNT = te_pa_cm_cost_side_value }
+}
+
+# It backs its side in full (its goal, or its cartel at stake), not at half.
+te_pa_back_side_full = {
+	OR = {
+		var:te_pa_goal ?= 4
+		AND = {
+			te_pa_v_cartel > 0
+			te_pa_law_threatens_cartel = yes
+		}
+	}
+}
+
+# Country scope. The law its firms' sides are on (te_pa_side_law) is the one it is enacting now.
+te_pa_side_law_enacting = {
+	te_pa_side_law_gap < 0.5
+}
+
+# Company scope, with scope:te_pa_side_home its country settling its sides (te_pa_sides_settle): the firm spent on
+# the side that won, for a law that passed or against one that did not.
+te_pa_side_won = {
+	OR = {
+		AND = {
+			var:te_pa_side_sign ?= 1
+			scope:te_pa_side_home = { var:te_pa_side_passed ?= 1 }
+		}
+		AND = {
+			var:te_pa_side_sign ?= -1
+			scope:te_pa_side_home = { var:te_pa_side_passed ?= 0 }
+		}
+	}
+}
+
+# Company scope. Its side spending is on the law its country's sides are on now.
+te_pa_side_on_current = {
+	has_variable = te_pa_side_of
+	te_pa_v_side_of >= te_pa_side_law_now
+	te_pa_v_side_of <= te_pa_side_law_now
+}
+
+# ---------------------------------------------------------------------------
+# The press (§ 8.5)
+# ---------------------------------------------------------------------------
+
+# Its country's speech law lets it hold a press: none may under Outlawed Dissent; under Censorship only a Favored or
+# Tolerated firm; under Right of Assembly and Protected Speech any.
+te_pa_press_allowed = {
+	owner = { NOT = { has_law = law_type:law_outlawed_dissent } }
+	trigger_if = {
+		limit = { owner = { has_law = law_type:law_censorship } }
+		NOT = { var:te_pa_posture ?= -1 }
+	}
+}
+
+# It has a secret holding a press would keep out of the papers: a secret cartel, a captured regulator not yet
+# exposed, or secret campaign money still at risk.
+te_pa_has_secret = {
+	OR = {
+		AND = {
+			te_pa_v_cartel > 0
+			var:te_pa_cartel_known ?= 0
+		}
+		AND = {
+			te_pa_v_reg > 0
+			var:te_pa_reg_known ?= 0
+		}
+		te_pa_v_cm_secret > 0
+	}
+}
+
+# Found a press (§ 8.5), an opportunistic verb after the goal's (and the trust's defence in the cartel firm's lists,
+# § 6.4): it holds none, the speech law allows one, it has the founding cost and a year's accrual besides, it has a
+# secret holding to hide or a law at stake, and five years have passed since a press of its was closed.
+te_pa_can_found_press = {
+	te_pa_v_press <= 0
+	te_pa_press_allowed = yes
+	owner = { te_pa_private_ownership_ended = no }
+	te_pa_v_funds >= te_pa_press_spare_value
+	OR = {
+		te_pa_has_secret = yes
+		te_pa_has_stake = yes
+	}
+	te_pa_wait_over = { VAR = te_pa_press_again }
+}
+
+# The government may close its press (§ 8.7): under Censorship (a speech law that allows it), or once it has won a
+# suit against the firm within ten years (te_pa_cartel_barred_until, the court's bar on the cartel). Under Right of
+# Assembly and Protected Speech the suit is the only way; under Outlawed Dissent no press is left to close.
+te_pa_sa_can_close_press = {
+	te_pa_v_press > 0
+	OR = {
+		owner = { has_law = law_type:law_censorship }
+		te_pa_v_cartel_barred_until > te_history_month_index
+	}
+}
+
+# Closing its press costs the government nothing (§ 8.5: under Censorship, a Restrained firm's).
+te_pa_press_close_free = {
+	owner = { has_law = law_type:law_censorship }
+	var:te_pa_posture ?= -1
+}
+
+# The Close the Press button's test (te_pa_sguis.txt): country scope, the scripted GUI's root, with scope:te_pa_row the
+# row the button sits on; one custom_tooltip a condition, as the other actions' are.
+te_pa_sa_can_close_press_row = {
+	te_pa_sa_row_ours = yes
+	custom_tooltip = {
+		text = te_pa_sa_has_press_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_v_press > 0 } }
+	}
+	custom_tooltip = {
+		text = te_pa_sa_press_closable_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_sa_can_close_press = yes } }
+	}
+}
+
+# The firm (an entry of the country list te_pa_presses), with scope:te_pa_expose_firm a firm whose secret holding is
+# being rolled: its press presses on that firm (§ 8.5: the other side of its law, or a cartel that sells its input).
+te_pa_press_hits = {
+	te_pa_v_press > 0
+	exists = scope:te_pa_expose_firm
+	NOT = { this = scope:te_pa_expose_firm }
+	OR = {
+		# The two backed opposite sides of the law being enacted.
+		AND = {
+			te_pa_side_on_current = yes
+			scope:te_pa_expose_firm = { te_pa_side_on_current = yes }
+			te_pa_v_side_sign_product < 0
+		}
+		# The rolled firm holds a cartel that makes one of this firm's inputs.
+		AND = {
+			scope:te_pa_expose_firm = { te_pa_v_cartel > 0 }
+			te_pa_press_x_out > 0
+			OR = {
+				AND = {
+					te_pa_press_in1 >= te_pa_press_x_out
+					te_pa_press_in1 <= te_pa_press_x_out
+				}
+				AND = {
+					te_pa_press_in2 >= te_pa_press_x_out
+					te_pa_press_in2 <= te_pa_press_x_out
+				}
+			}
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The ledger (container scope, an entry): which lines an exposure of secret campaign money gives their author
+# ---------------------------------------------------------------------------
+
+te_pa_ledger_verb_of_cm = {
+	OR = {
+		var:te_pa_l_verb ?= 43
+		var:te_pa_l_verb ?= 44
+	}
+}

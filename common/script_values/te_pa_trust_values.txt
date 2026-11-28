@@ -259,11 +259,14 @@ te_pa_expose_state_value = {
 }
 
 # Company scope. The hook later tasks add their terms to: Task 4b's Inquiry (§ 6.6: +30 for a year,
-# te_pa_inquiry_term) and Task 5's press (§ 8.5: the firm's own press lowers its chance, a rival's raises it). Each is
-# a term in this one value, so te_pa_expose_chance_value reads them all.
+# te_pa_inquiry_term, which reaches secret campaign money's roll too: § 8.7) and Task 5a's presses (§ 8.5: the firm's
+# own press lowers its chance, te_pa_press_own_term; a rival's raises it, te_pa_press_rival_term). Each is a term in
+# this one value, so te_pa_expose_chance_value reads them all.
 te_pa_expose_hook_value = {
 	value = 0
 	add = te_pa_inquiry_term
+	add = te_pa_press_own_term
+	add = te_pa_press_rival_term
 }
 
 # Company scope. A secret holding's yearly chance of exposure, before a captured regulator's cut: the base, the state,
@@ -297,7 +300,10 @@ te_pa_expose_reg_value = {
 
 te_pa_stand_after_exposure = {
 	value = te_pa_v_stand
-	subtract = te_pa_expose_stand_loss
+	subtract = {
+		value = te_pa_expose_stand_loss
+		multiply = te_pa_press_stand_factor
+	}
 	min = 0
 }
 

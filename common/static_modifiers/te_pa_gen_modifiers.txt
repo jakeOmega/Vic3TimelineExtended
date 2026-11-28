@@ -7196,3 +7196,48 @@ te_pa_found_company_zastava = {
 	state_education_access_add = 0.1
 	state_mortality_mult = -0.05
 }
+
+# Politics at home (Task 5a, spec § 8.3): patronage, one country modifier an interest group type, vanilla's and the
+# mod's. The firms' money for a group raises its political strength, at most patronage_cap; applied with the
+# country's patronage total for the group over its full figure, at most 1 (te_pa_gen_patronage_quarter, from the
+# quarter only). A total decays once the money stops (te_pa_politics_effects.txt).
+
+te_pa_patronage_ig_armed_forces = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	interest_group_ig_armed_forces_pol_str_mult = 0.2
+}
+
+te_pa_patronage_ig_devout = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	interest_group_ig_devout_pol_str_mult = 0.2
+}
+
+te_pa_patronage_ig_industrialists = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	interest_group_ig_industrialists_pol_str_mult = 0.2
+}
+
+te_pa_patronage_ig_intelligentsia = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	interest_group_ig_intelligentsia_pol_str_mult = 0.2
+}
+
+te_pa_patronage_ig_landowners = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	interest_group_ig_landowners_pol_str_mult = 0.2
+}
+
+te_pa_patronage_ig_petty_bourgeoisie = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	interest_group_ig_petty_bourgeoisie_pol_str_mult = 0.2
+}
+
+te_pa_patronage_ig_rural_folk = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	interest_group_ig_rural_folk_pol_str_mult = 0.2
+}
+
+te_pa_patronage_ig_trade_unions = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	interest_group_ig_trade_unions_pol_str_mult = 0.2
+}

@@ -6048,3 +6048,64 @@ te_pa_gen_charter_held = {
 		}
 	}
 }
+
+# Scope: a country. The law numbered by its variable VAR (the law table's number) is in force: the enactment
+# its firms' sides were on passed (te_pa_sides_settle, VAR = te_pa_side_law), or the one the law_progress
+# self-check watched did.
+te_pa_gen_law_n_in_force = {
+	OR = {
+		AND = { var:$VAR$ ?= 1 has_law = law_type:law_traditionalism }
+		AND = { var:$VAR$ ?= 2 has_law = law_type:law_interventionism }
+		AND = { var:$VAR$ ?= 3 has_law = law_type:law_agrarianism }
+		AND = { var:$VAR$ ?= 4 has_law = law_type:law_industry_banned }
+		AND = { var:$VAR$ ?= 5 has_law = law_type:law_extraction_economy }
+		AND = { var:$VAR$ ?= 6 has_law = law_type:law_laissez_faire }
+		AND = { var:$VAR$ ?= 7 has_law = law_type:law_cooperative_ownership }
+		AND = { var:$VAR$ ?= 8 has_law = law_type:law_command_economy }
+		AND = { var:$VAR$ ?= 9 has_law = law_type:law_no_workers_rights }
+		AND = { var:$VAR$ ?= 10 has_law = law_type:law_regulatory_bodies }
+		AND = { var:$VAR$ ?= 11 has_law = law_type:law_worker_protections }
+		AND = { var:$VAR$ ?= 12 has_law = law_type:law_child_labor_allowed }
+		AND = { var:$VAR$ ?= 13 has_law = law_type:law_restricted_child_labor }
+		AND = { var:$VAR$ ?= 14 has_law = law_type:law_compulsory_primary_school }
+		AND = { var:$VAR$ ?= 15 has_law = law_type:law_guild_system }
+		AND = { var:$VAR$ ?= 16 has_law = law_type:law_combination_acts }
+		AND = { var:$VAR$ ?= 17 has_law = law_type:law_anti_strike_laws }
+		AND = { var:$VAR$ ?= 18 has_law = law_type:law_right_to_associate }
+		AND = { var:$VAR$ ?= 19 has_law = law_type:law_corporatized_unions }
+		AND = { var:$VAR$ ?= 20 has_law = law_type:law_factory_councils }
+		AND = { var:$VAR$ ?= 21 has_law = law_type:law_no_ministry_of_labor }
+		AND = { var:$VAR$ ?= 22 has_law = law_type:law_pro_labor_ministry_of_labor }
+		AND = { var:$VAR$ ?= 23 has_law = law_type:law_pro_capital_ministry_of_labor }
+		AND = { var:$VAR$ ?= 24 has_law = law_type:law_guilds_chartered_monopolies }
+		AND = { var:$VAR$ ?= 25 has_law = law_type:law_freedom_of_contract }
+		AND = { var:$VAR$ ?= 26 has_law = law_type:law_trust_busting }
+		AND = { var:$VAR$ ?= 27 has_law = law_type:law_regulated_utilities }
+		AND = { var:$VAR$ ?= 28 has_law = law_type:law_dirigisme }
+		AND = { var:$VAR$ ?= 29 has_law = law_type:law_command_cooperative_economy }
+		AND = { var:$VAR$ ?= 30 has_law = law_type:law_unrestricted_extraction }
+		AND = { var:$VAR$ ?= 31 has_law = law_type:law_fossil_expansion_moratorium }
+		AND = { var:$VAR$ ?= 32 has_law = law_type:law_managed_fossil_phaseout }
+		AND = { var:$VAR$ ?= 33 has_law = law_type:law_unrestricted_automation }
+		AND = { var:$VAR$ ?= 34 has_law = law_type:law_robot_tax }
+		AND = { var:$VAR$ ?= 35 has_law = law_type:law_human_labor_quotas }
+		AND = { var:$VAR$ ?= 36 has_law = law_type:law_automation_dividend }
+		AND = { var:$VAR$ ?= 37 has_law = law_type:law_no_ip_protection }
+		AND = { var:$VAR$ ?= 38 has_law = law_type:law_creative_commons }
+		AND = { var:$VAR$ ?= 39 has_law = law_type:law_traditional_ip_protection }
+		AND = { var:$VAR$ ?= 40 has_law = law_type:law_strict_ip_protection }
+		AND = { var:$VAR$ ?= 41 has_law = law_type:law_open_source_innovation }
+		AND = { var:$VAR$ ?= 42 has_law = law_type:law_state_intellectual_property }
+		AND = { var:$VAR$ ?= 43 has_law = law_type:law_unregulated_banking }
+		AND = { var:$VAR$ ?= 44 has_law = law_type:law_free_mutual_banking }
+		AND = { var:$VAR$ ?= 45 has_law = law_type:law_universal_banking_light_prudence }
+		AND = { var:$VAR$ ?= 46 has_law = law_type:law_prudential_narrow_banking }
+		AND = { var:$VAR$ ?= 47 has_law = law_type:law_directed_credit_development_banks }
+		AND = { var:$VAR$ ?= 48 has_law = law_type:law_state_owned_banking }
+		AND = { var:$VAR$ ?= 49 has_law = law_type:law_central_bank_independence }
+		AND = { var:$VAR$ ?= 50 has_law = law_type:law_no_campaign_finance_laws }
+		AND = { var:$VAR$ ?= 51 has_law = law_type:law_unregulated_donations }
+		AND = { var:$VAR$ ?= 52 has_law = law_type:law_donation_limits }
+		AND = { var:$VAR$ ?= 53 has_law = law_type:law_publicly_funded_elections }
+	}
+}

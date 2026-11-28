@@ -48,6 +48,21 @@ te_pa_yearly_on_action = {
 	}
 }
 
+# An election campaign has ended: its month is marked, and the firms' wagers on the parties they backed are read a
+# month later, once the new government has formed (te_pa_election_end, te_pa_politics_effects.txt). Root = the
+# country whose campaign ended (un_mission_on_actions.txt, covert_warfare_on_actions.txt).
+on_election_campaign_end = {
+	on_actions = {
+		te_pa_election_end_on_action
+	}
+}
+
+te_pa_election_end_on_action = {
+	effect = {
+		te_pa_election_end = yes
+	}
+}
+
 # A company disbanded: clear the firm (te_pa_clear_firm). Root = the country, scope:company = the company; beside
 # the flagship cleanup in extra_on_actions.txt (te_on_company_disbanded).
 on_company_disbanded = {

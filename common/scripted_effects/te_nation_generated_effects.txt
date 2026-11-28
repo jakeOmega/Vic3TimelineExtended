@@ -13,6 +13,7 @@ te_nation_refresh_source_flags = {
 	set_variable = { name = te_nation_src_demography value = te_nation_src_demography_count }
 	set_variable = { name = te_nation_src_nuclear_order value = te_nation_src_nuclear_order_count }
 	set_variable = { name = te_nation_src_governance value = te_nation_src_governance_count }
+	set_variable = { name = te_nation_src_private_actors value = te_nation_src_private_actors_count }
 	set_variable = { name = te_nation_src_family_measures value = te_nation_src_family_measures_count }
 	set_variable = { name = te_nation_src_civil_rights value = te_nation_src_civil_rights_count }
 	set_variable = { name = te_nation_src_decolonization value = te_nation_src_decolonization_count }
@@ -31,5 +32,5 @@ te_nation_refresh_source_flags = {
 	set_variable = { name = te_nation_src_commons value = te_nation_src_commons_count }
 	set_variable = { name = te_nation_src_foreign value = te_nation_src_foreign_count }
 	# Every flag above is set (_ready_limit)
-	set_variable = te_nation_src_set_0c8cff10
+	set_variable = te_nation_src_set_ab5bb4b4
 }

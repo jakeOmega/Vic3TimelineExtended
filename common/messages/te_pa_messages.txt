@@ -28,3 +28,13 @@ te_pa_move_declared = {
 	notification_type = feed
 	color = neutral
 }
+
+# The campaign-money threshold (spec §§ 4.6, 8.3; te_pa_cmp_add_one, te_pa_politics_effects.txt): once a campaign,
+# the firms together have bought one party more momentum than a medium election event; scope:te_pa_note_party the
+# party.
+te_pa_campaign_money_big = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}

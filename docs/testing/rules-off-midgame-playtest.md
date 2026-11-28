@@ -247,7 +247,8 @@ infamy, relations and legitimacy. Switch the rule to Simplified.
 Setup: a game with Private Actors Enabled, played a year so every firm has taken a turn, with a firm of the player's
 past 40% of its sector or failing (its notice posted), and, played on, a cartel (open or secret) and a foundation
 somewhere (the console can set `te_pa_share` to 0.6 on a Dominance firm before its turn), a petition under way with its
-alert showing, and one of the state's actions taken (a suit or an inquiry). Note a few firms' `te_pa_goal`,
+alert showing, one of the state's actions taken (a suit or an inquiry), and some firm's patronage on an interest
+group (a "Patronage from Firms" modifier on the country). Note a few firms' `te_pa_goal`,
 `te_pa_funds`, `te_pa_cartel`, `te_pa_found` and `te_pa_turn_in` and the player's `te_pa_ledger`.
 
 1. **Within a month** the country's `te_pa_rows` list and its containers are gone, `te_pa_q_in` is gone, and no firm
@@ -255,7 +256,8 @@ alert showing, and one of the state's actions taken (a suit or an inquiry). Note
    no "<company> Cartel" or "Restricted Supply (author unknown)" on any country, no "<company> Foundation" on any state,
    and `te_pa_cartels` is gone. The declared move's variables (`te_pa_move_firm`, `te_pa_move_months`,
    `te_pa_move_hand`) and the month's candidates are gone, so neither top-bar alert shows, and no interest group holds
-   "State Action Against Its Firm" or "Resents a Monopoly Charter".
+   "State Action Against Its Firm" or "Resents a Monopoly Charter". No "Patronage from Firms: <group>" is on any
+   country, the Politics section's rows (`te_pa_pol_view`), `te_pa_presses` and `te_pa_elect_end` are gone.
 2. **The records stay**: each firm keeps `te_pa_init`, its goal, its currencies, its holdings (`te_pa_cartel`,
    `te_pa_reg`, `te_pa_found`) and its `te_pa_turn_in`, which no longer counts down; a foundation's state keeps
    `te_pa_st_found_str`. The ledger stays as it was.
@@ -264,7 +266,8 @@ alert showing, and one of the state's actions taken (a suit or an inquiry). Note
    and a firm still past a threshold posts its notice once more. A case under way (`te_pa_case_end`) reaches its
    verdict at the next month if its time has passed; a levy, an inquiry and a charter resume from the firm's record.
    A petition that was under way counts as ended at the switch, so the next waits 12 months from it. The foundations' modifiers are back at the next month,
-   the cartels' at the next quarter, at the strengths the records held.
+   the cartels' and the patronage modifiers at the next quarter, at the strengths and totals the records held; a
+   press, the sides on a law and a wager resume from the records (`te_pa_press`, `te_pa_side_law`, `te_pa_bet_ig`).
 
 ## Self-checks
 

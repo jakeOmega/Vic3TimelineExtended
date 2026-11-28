@@ -1,0 +1,1013 @@
+﻿# Private Actors, politics at home (docs/systems/mod_systems/private_actors.md § Politics at Home; spec §§ 8.2, 8.3,
+# 8.5, 8.7, 6.4; plan Task 5). Sides on the law being enacted and their settlement; stalling (te_pa_do_stall, in
+# te_pa_trust_effects.txt) and speeding the law; campaign money in its two forms, momentum for a party in a campaign
+# and patronage for an interest group otherwise, under each Electoral Finance law, open or secret; the wager on the
+# side it backed; the press; the government's Close the Press. Numbers in te_pa_politics_values.txt, triggers in
+# te_pa_politics_triggers.txt; the patronage modifiers, one an interest group type, and the per-group dispatch are
+# generated (te_pa_gen_modifiers.txt, te_pa_gen_effects.txt; gen_private_actors.py).
+#
+# On the firm (company variables, unset while unused; te_pa_politics_clear drops them with the firm):
+#   te_pa_stake_law (the law table's number of its law at stake), te_pa_stake_sign (1 for it, -1 against it),
+#     te_pa_stake_trade (1: the stake is the trade policy, sign 1 toward Free Trade) | te_pa_stake_pick writes them
+#   te_pa_side_of (the law its side spending is on), te_pa_side_sign, te_pa_side_spent (pounds)
+#   te_pa_speed_month (its last speed) | te_pa_campaign_total (its campaign money in all, pounds: the Electoral
+#     Finance stances read it) | te_pa_cm_want, _open, _hidden, _paid, _units, _mom (a spend, staged)
+#   te_pa_cm_secret (secret money still at risk, pounds), te_pa_cm_secret_units (what it bought, patronage units),
+#     te_pa_cm_secret_ig (the group it went to, for patronage)
+#   te_pa_bet_ig (the group backed: a party's largest member, or the group patronized), te_pa_bet_form (1 momentum,
+#     2 patronage), te_pa_bet_out (1: the group was out of government), te_pa_bet_until (a patronage wager's month)
+#   te_pa_press 0-100, te_pa_press_again (no new press before this month)
+# On the country:
+#   te_pa_side_law (the law the sides are on), te_pa_side_for / _against (pounds), te_pa_side_top_<for|against>_<1-3>
+#     (the three largest firms each side) and te_pa_side_amt_<side>_<n> (theirs), te_pa_side_n_for / _against
+#   te_pa_stall_law and _month, te_pa_speed_law and _month: the last firm setback and progress, a law a year
+#   te_pa_pat_<group> (patronage, units), te_pa_pm_<group> (its modifier's multiplier), te_pa_cmp_<group> (campaign
+#     money to the party the group leads this election, pounds), te_pa_cmm_<group> (the momentum it bought),
+#     te_pa_cmn_<group> (the campaign's notice posted) | te_pa_elect_end (the month a campaign ended, until settled)
+#   te_pa_pol_secret (secret money at risk, all firms, pounds) | te_pa_pol_campaign (1 in a campaign, for the tab)
+#   the lists te_pa_presses (the firms with a press) and te_pa_pol_view (the Politics section's rows), rebuilt
+#
+# Ledger verbs (Task 5a's 40-49; 5b's are 50-59), each a predicate after the firm's name:
+#   40 speeds <law>                                      41 was on the winning side of <law> (size: its side's money)
+#   42 was on the losing side of <law> (size: likewise)  43 gives <size> to the campaign of the party of <group>
+#   44 gives <size> in patronage to <group>              45 is exposed as the author of secret campaign money
+#   46 founds a press                                    47 its press is discredited
+#   48 no longer keeps a press                           49 has its press closed by the government
+# 43 and 44 carry KNOWN 0 for the secret part, whose lines get their author when it is exposed.
+
+# ---------------------------------------------------------------------------
+# The turn (te_pa_turn, after the goal is chosen and before te_pa_act)
+# ---------------------------------------------------------------------------
+
+# Company scope (scope:te_pa_home its country). The country's sides are settled if their law has ended and opened on
+# a new one (te_pa_sides_check), and the firm's law at stake is read.
+te_pa_politics_turn = {
+	scope:te_pa_home = { te_pa_sides_check = yes }
+	te_pa_stake_pick = yes
+}
+
+# Company scope, after te_pa_gen_law_pick and the trade stance. The law it has most at stake, the side campaign money
+# goes to: the law being enacted where it has a stance; else the law in force that burdens it most (against it); else
+# the law it could move to that favors it most (for it); else the trade policy where it burdens it. A firm seeking
+# Cheaper Inputs looks first at the trade policy taxing its imported inputs (§ 8.3: "a tariff on its input"), one
+# seeking A Protected Market at protection where its output is imported. None: its executive's interest group is the
+# side (§ 5.3, te_pa_cm_pick).
+te_pa_stake_pick = {
+	set_variable = { name = te_pa_stake_law value = 0 }
+	set_variable = { name = te_pa_stake_sign value = 0 }
+	set_variable = { name = te_pa_stake_trade value = 0 }
+	if = {
+		limit = {
+			var:te_pa_goal ?= 1
+			te_pa_v_trade < 0
+			OR = {
+				owner = { te_pa_trade_protective = yes }
+				owner = { te_pa_trade_enacting_protective = yes }
+			}
+		}
+		set_variable = { name = te_pa_stake_trade value = 1 }
+		set_variable = { name = te_pa_stake_sign value = 1 }
+	}
+	else_if = {
+		limit = {
+			var:te_pa_goal ?= 2
+			te_pa_wants_output_tariff = yes
+			owner = { te_pa_trade_protective = no }
+		}
+		set_variable = { name = te_pa_stake_trade value = 1 }
+		set_variable = { name = te_pa_stake_sign value = -1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_pa_g_law_enacting_law
+			var:te_pa_g_law_enacting_law > 0
+			OR = {
+				te_pa_v_law_enacting > 0
+				te_pa_v_law_enacting < 0
+			}
+		}
+		set_variable = { name = te_pa_stake_law value = var:te_pa_g_law_enacting_law }
+		set_variable = { name = te_pa_stake_sign value = 1 }
+		if = {
+			limit = { te_pa_v_law_enacting < 0 }
+			set_variable = { name = te_pa_stake_sign value = -1 }
+		}
+	}
+	else_if = {
+		limit = {
+			te_pa_v_law_worst < 0
+			has_variable = te_pa_g_law_worst_law
+			var:te_pa_g_law_worst_law > 0
+		}
+		set_variable = { name = te_pa_stake_law value = var:te_pa_g_law_worst_law }
+		set_variable = { name = te_pa_stake_sign value = -1 }
+	}
+	else_if = {
+		limit = {
+			te_pa_v_law_best > 0
+			has_variable = te_pa_g_law_best_law
+			var:te_pa_g_law_best_law > 0
+		}
+		set_variable = { name = te_pa_stake_law value = var:te_pa_g_law_best_law }
+		set_variable = { name = te_pa_stake_sign value = 1 }
+	}
+	else_if = {
+		limit = { te_pa_trade_burden_value > 0 }
+		set_variable = { name = te_pa_stake_trade value = 1 }
+		set_variable = { name = te_pa_stake_sign value = 1 }
+		if = {
+			limit = { te_pa_v_trade > 0 }
+			set_variable = { name = te_pa_stake_sign value = -1 }
+		}
+	}
+}
+
+# A Friendly Law (§ 8.3): set back the law being enacted that it is against, push the one it is for, or put money on
+# its law at stake.
+te_pa_act_law = {
+	if = {
+		limit = { te_pa_can_stall = yes }
+		te_pa_do_stall = yes
+	}
+	else_if = {
+		limit = { te_pa_can_speed = yes }
+		te_pa_do_speed = yes
+	}
+	else_if = {
+		limit = { te_pa_can_campaign = yes }
+		te_pa_do_campaign = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Speeding the law (§ 8.3)
+# ---------------------------------------------------------------------------
+
+# Company scope (scope:te_pa_home its country). Twenty Connections for ten points of the current checkpoint
+# (add_law_progress, a fraction of it), logged with the law named. The law_progress self-check (probe 10) reads the
+# enactment a month later. Fallback, if it is BROKEN: a timed country_law_enactment_success_add modifier in its place,
+# as vanilla's strike events use.
+te_pa_do_speed = {
+	set_variable = { name = te_pa_conn value = te_pa_conn_after_speed }
+	set_variable = { name = te_pa_speed_month value = te_history_month_index }
+	scope:te_pa_home = {
+		set_variable = { name = te_pa_speed_law value = te_pa_gen_enacting_law_index }
+		set_variable = { name = te_pa_speed_law_month value = te_history_month_index }
+		te_pa_debug_progress_arm = yes
+		add_law_progress = te_pa_speed_progress
+	}
+	save_scope_as = te_pa_l_actor
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = 40 KNOWN = 1 } }
+	if = {
+		limit = { exists = scope:te_pa_l_new }
+		scope:te_pa_l_new = {
+			set_variable = { name = te_pa_l_law value = scope:te_pa_home.var:te_pa_speed_law }
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Campaign money (§ 8.3)
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn. A goal's campaign money on its law at stake, in full.
+te_pa_do_campaign = {
+	te_pa_campaign_spend = { SIZE = full }
+}
+
+# Company scope, the turn, after the goal's verb (§ 8.2). Its money on its side of the law being enacted: its stake
+# is that law, with its stance's sign; in full for a firm seeking A Friendly Law or defending its cartel, at half
+# otherwise. What it spends adds to its side's, and its country's three largest each side are ranked again.
+te_pa_do_back_side = {
+	set_variable = { name = te_pa_stake_law value = te_pa_enacting_law_firm }
+	set_variable = { name = te_pa_stake_trade value = 0 }
+	set_variable = { name = te_pa_stake_sign value = 1 }
+	if = {
+		limit = { te_pa_gen_stance_enacting < 0 }
+		set_variable = { name = te_pa_stake_sign value = -1 }
+	}
+	if = {
+		limit = { te_pa_back_side_full = yes }
+		te_pa_campaign_spend = { SIZE = full }
+	}
+	else = {
+		te_pa_campaign_spend = { SIZE = half }
+	}
+	if = {
+		limit = { var:te_pa_spent ?= 1 }
+		set_variable = { name = te_pa_side_of value = te_pa_side_law_now }
+		set_variable = { name = te_pa_side_sign value = var:te_pa_stake_sign }
+		set_variable = { name = te_pa_side_spent value = te_pa_side_spent_after }
+		save_scope_as = te_pa_side_firm
+		scope:te_pa_home = {
+			if = {
+				limit = { scope:te_pa_side_firm = { var:te_pa_side_sign ?= 1 } }
+				change_variable = { name = te_pa_side_for add = scope:te_pa_side_firm.var:te_pa_cm_paid }
+			}
+			else = {
+				change_variable = { name = te_pa_side_against add = scope:te_pa_side_firm.var:te_pa_cm_paid }
+			}
+			te_pa_sides_top = yes
+		}
+	}
+}
+
+# Company scope (scope:te_pa_home its country). The one place campaign money is spent: SIZE full or half of
+# te_pa_cm_cost_<SIZE>_value, through te_pa_spend_funds (out of the investment pool). The Electoral Finance law splits
+# it into what goes openly and what goes in secret (te_pa_cm_open_value, _hidden_value); what it buys, in units, goes
+# to a party's momentum in a campaign or to an interest group's patronage otherwise (te_pa_cm_pick), and the firm
+# wagers on that side (te_pa_bet_place). Its secret part is at risk of exposure at its yearly roll. Sets te_pa_spent.
+te_pa_campaign_spend = {
+	save_scope_as = te_pa_stake_firm
+	set_variable = { name = te_pa_cm_want value = te_pa_cm_cost_$SIZE$_value }
+	set_variable = { name = te_pa_cm_open value = te_pa_cm_open_value }
+	set_variable = { name = te_pa_cm_hidden value = te_pa_cm_hidden_value }
+	te_pa_spend_funds = { AMOUNT = te_pa_cm_spend_value }
+	if = {
+		limit = { var:te_pa_spent ?= 1 }
+		set_variable = { name = te_pa_cm_paid value = te_pa_cm_spend_value }
+		set_variable = { name = te_pa_cm_units value = te_pa_cm_units_value }
+		set_variable = { name = te_pa_cm_mom value = te_pa_cm_momentum_value }
+		set_variable = { name = te_pa_campaign_total value = te_pa_campaign_total_after }
+		te_pa_cm_pick = yes
+		if = {
+			limit = { exists = scope:te_pa_cm_party }
+			te_pa_debug_momentum_arm = yes
+			scope:te_pa_cm_party = {
+				save_scope_as = te_pa_note_party
+				add_momentum = te_pa_cm_momentum_value
+			}
+			te_pa_debug_momentum_after = yes
+			scope:te_pa_home = {
+				set_variable = { name = te_pa_cm_stage_paid value = scope:te_pa_stake_firm.var:te_pa_cm_paid }
+				set_variable = { name = te_pa_cm_stage_mom value = scope:te_pa_stake_firm.var:te_pa_cm_mom }
+				te_pa_gen_cmp_add = yes
+				remove_variable = te_pa_cm_stage_paid
+				remove_variable = te_pa_cm_stage_mom
+			}
+			te_pa_bet_place = { FORM = 1 }
+			te_pa_cm_lines = { OPEN = 43 }
+		}
+		else_if = {
+			limit = { exists = scope:te_pa_cm_ig }
+			scope:te_pa_home = {
+				set_variable = { name = te_pa_cm_stage value = scope:te_pa_stake_firm.var:te_pa_cm_units }
+				te_pa_gen_pat_add = yes
+				remove_variable = te_pa_cm_stage
+			}
+			if = {
+				limit = { var:te_pa_cm_hidden > 0 }
+				set_variable = { name = te_pa_cm_secret_units value = te_pa_cm_secret_units_after_spend }
+				set_variable = { name = te_pa_cm_secret_ig value = scope:te_pa_cm_ig }
+			}
+			te_pa_bet_place = { FORM = 2 }
+			te_pa_cm_lines = { OPEN = 44 }
+		}
+		if = {
+			limit = { var:te_pa_cm_hidden > 0 }
+			set_variable = { name = te_pa_cm_secret value = te_pa_cm_secret_after_spend }
+		}
+		scope:te_pa_home = { te_pa_pol_refresh = yes }
+	}
+}
+
+# Company scope. Who the money goes to (§ 8.3): in a campaign (te_pa_cm_momentum_form), the party whose members stand
+# best on its side, weighed by clout (te_pa_party_side_value), or its executive's interest group's party (§ 5.3) when
+# none stands for it, the wager on the party's largest member; otherwise, or with no party to back, the interest
+# group that stands best on its side, or its executive's. Saves scope:te_pa_cm_party (momentum) or scope:te_pa_cm_ig
+# (patronage), and scope:te_pa_cm_bet_ig, the group the wager is on.
+te_pa_cm_pick = {
+	clear_saved_scope = te_pa_cm_party
+	clear_saved_scope = te_pa_cm_ig
+	clear_saved_scope = te_pa_cm_bet_ig
+	if = {
+		limit = { owner = { te_pa_cm_momentum_form = yes } }
+		scope:te_pa_home = {
+			if = {
+				limit = { any_active_party = { te_pa_party_side_value > 0 } }
+				ordered_active_party = {
+					limit = { te_pa_party_side_value > 0 }
+					order_by = te_pa_party_side_value
+					position = 0
+					check_range_bounds = no
+					save_scope_as = te_pa_cm_party
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { exists = scope:te_pa_cm_party } }
+			executive ?= { interest_group ?= { party ?= { save_scope_as = te_pa_cm_party } } }
+		}
+		scope:te_pa_cm_party ?= {
+			ordered_member = {
+				order_by = ig_clout
+				position = 0
+				check_range_bounds = no
+				save_scope_as = te_pa_cm_bet_ig
+			}
+		}
+		if = {
+			limit = { NOT = { exists = scope:te_pa_cm_bet_ig } }
+			clear_saved_scope = te_pa_cm_party
+		}
+	}
+	if = {
+		limit = { NOT = { exists = scope:te_pa_cm_party } }
+		scope:te_pa_home = {
+			if = {
+				limit = { any_interest_group = { te_pa_ig_side_value > 0 } }
+				ordered_interest_group = {
+					limit = { te_pa_ig_side_value > 0 }
+					order_by = te_pa_ig_side_value
+					position = 0
+					check_range_bounds = no
+					save_scope_as = te_pa_cm_ig
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { exists = scope:te_pa_cm_ig } }
+			executive ?= { interest_group ?= { save_scope_as = te_pa_cm_ig } }
+		}
+		scope:te_pa_cm_ig ?= { save_scope_as = te_pa_cm_bet_ig }
+	}
+}
+
+# Company scope, a spend made (scope:te_pa_cm_bet_ig the group). The ledger's lines: the open part (verb OPEN, 43 a
+# campaign or 44 patronage), and the secret part with its author unknown, each with its sum and the group.
+te_pa_cm_lines = {
+	clear_saved_scope = te_pa_cm_n
+	scope:te_pa_cm_bet_ig ?= { save_scope_value_as = { name = te_pa_cm_n value = te_pa_gen_ig_n } }
+	if = {
+		limit = { var:te_pa_cm_open > 0 }
+		te_pa_cm_line = { VERB = $OPEN$ KNOWN = 1 SIZE = te_pa_cm_open }
+	}
+	if = {
+		limit = { var:te_pa_cm_hidden > 0 }
+		te_pa_cm_line = { VERB = $OPEN$ KNOWN = 0 SIZE = te_pa_cm_hidden }
+	}
+}
+
+te_pa_cm_line = {
+	save_scope_as = te_pa_l_actor
+	save_scope_value_as = { name = te_pa_l_size value = var:$SIZE$ }
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = $VERB$ KNOWN = $KNOWN$ } }
+	if = {
+		limit = {
+			exists = scope:te_pa_l_new
+			exists = scope:te_pa_cm_n
+		}
+		scope:te_pa_l_new = { set_variable = { name = te_pa_l_ig value = scope:te_pa_cm_n } }
+	}
+}
+
+# Company scope (scope:te_pa_cm_bet_ig the group). The wager (§ 8.3): FORM 1, the party it backed in a campaign, read
+# when the election is settled; FORM 2, the group it patronized, read when the group enters government or, if it is
+# in government already, after te_pa_bet_months. A newer wager replaces an older one.
+te_pa_bet_place = {
+	if = {
+		limit = { exists = scope:te_pa_cm_bet_ig }
+		set_variable = { name = te_pa_bet_ig value = scope:te_pa_cm_bet_ig }
+		set_variable = { name = te_pa_bet_form value = $FORM$ }
+		set_variable = { name = te_pa_bet_until value = te_pa_bet_until_value }
+		set_variable = { name = te_pa_bet_out value = 1 }
+		if = {
+			limit = { scope:te_pa_cm_bet_ig = { is_in_government = yes } }
+			set_variable = { name = te_pa_bet_out value = 0 }
+		}
+	}
+}
+
+# Company scope, the quarter. A patronage wager is settled when its group enters government, or when its time is up.
+te_pa_bet_quarter = {
+	if = {
+		limit = { var:te_pa_bet_form ?= 2 }
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						var:te_pa_bet_out ?= 1
+						var:te_pa_bet_ig ?= { is_in_government = yes }
+					}
+					te_pa_wait_over = { VAR = te_pa_bet_until }
+				}
+			}
+			te_pa_bet_settle = yes
+		}
+	}
+}
+
+# Company scope. The side it backed is in government: Connections +10; it is not: -5 (§ 8.3, § 4.3: backing the loser
+# of an election costs Connections). The wager goes.
+te_pa_bet_settle = {
+	if = {
+		limit = { var:te_pa_bet_ig ?= { is_in_government = yes } }
+		set_variable = { name = te_pa_conn value = te_pa_conn_after_bet_win }
+	}
+	else = {
+		set_variable = { name = te_pa_conn value = te_pa_conn_after_bet_lose }
+	}
+	te_pa_drop = { VAR = te_pa_bet_ig }
+	te_pa_drop = { VAR = te_pa_bet_form }
+	te_pa_drop = { VAR = te_pa_bet_out }
+	te_pa_drop = { VAR = te_pa_bet_until }
+}
+
+# ---------------------------------------------------------------------------
+# The per-group records (country scope; the generated te_pa_gen_* effects call these with the group's key)
+# ---------------------------------------------------------------------------
+
+# Patronage onto the group's total (te_pa_cm_stage: units).
+te_pa_pat_add_one = {
+	if = {
+		limit = { NOT = { has_variable = te_pa_pat_$IG$ } }
+		set_variable = { name = te_pa_pat_$IG$ value = 0 }
+	}
+	change_variable = { name = te_pa_pat_$IG$ add = te_pa_v_cm_stage }
+}
+
+# Exposed secret patronage off the group's total (te_pa_cm_stage: what it bought).
+te_pa_pat_take_one = {
+	if = {
+		limit = { has_variable = te_pa_pat_$IG$ }
+		change_variable = { name = te_pa_pat_$IG$ subtract = te_pa_v_cm_stage }
+		clamp_variable = { name = te_pa_pat_$IG$ min = 0 }
+	}
+}
+
+# The quarter: the group's total decays, gone below te_pa_pat_floor, and its modifier's multiplier is the total over
+# te_pa_pat_full_units, at most 1 (the generated caller replaces the modifier right after).
+te_pa_pat_quarter_one = {
+	if = {
+		limit = { has_variable = te_pa_pat_$IG$ }
+		change_variable = { name = te_pa_pat_$IG$ multiply = te_pa_pat_keep }
+		if = {
+			limit = { var:te_pa_pat_$IG$ < te_pa_pat_floor }
+			remove_variable = te_pa_pat_$IG$
+			te_pa_drop = { VAR = te_pa_pm_$IG$ }
+		}
+		else = {
+			set_variable = { name = te_pa_pm_$IG$ value = var:te_pa_pat_$IG$ }
+			change_variable = { name = te_pa_pm_$IG$ divide = te_pa_pat_full_units }
+			clamp_variable = { name = te_pa_pm_$IG$ max = 1 min = 0 }
+		}
+	}
+	else = {
+		te_pa_drop = { VAR = te_pa_pm_$IG$ }
+	}
+}
+
+# Campaign money onto the record of the party the group leads (te_pa_cm_stage_paid pounds, te_pa_cm_stage_mom the
+# momentum), and the threshold notice (§ 4.6, § 8.3): once a campaign, when the firms together have bought a party
+# more momentum than a medium election event (vanilla's momentum_medium), a player is told (scope:te_pa_note_party).
+te_pa_cmp_add_one = {
+	if = {
+		limit = { NOT = { has_variable = te_pa_cmp_$IG$ } }
+		set_variable = { name = te_pa_cmp_$IG$ value = 0 }
+		set_variable = { name = te_pa_cmm_$IG$ value = 0 }
+	}
+	change_variable = { name = te_pa_cmp_$IG$ add = var:te_pa_cm_stage_paid }
+	change_variable = { name = te_pa_cmm_$IG$ add = var:te_pa_cm_stage_mom }
+	if = {
+		limit = {
+			var:te_pa_cmm_$IG$ > momentum_medium
+			NOT = { has_variable = te_pa_cmn_$IG$ }
+		}
+		set_variable = { name = te_pa_cmn_$IG$ value = 1 }
+		if = {
+			limit = { is_ai = no }
+			post_notification = te_pa_campaign_money_big
+		}
+	}
+}
+
+# An election settled: the party's record of this campaign goes.
+te_pa_cmp_clear_one = {
+	te_pa_drop = { VAR = te_pa_cmp_$IG$ }
+	te_pa_drop = { VAR = te_pa_cmm_$IG$ }
+	te_pa_drop = { VAR = te_pa_cmn_$IG$ }
+}
+
+# The Politics section's row for group N (scope:te_pa_pv_home the country), while it has patronage or campaign money:
+# a script container with the group's number, its modifier's multiplier, its party's campaign money and whether it
+# is in government.
+te_pa_pol_view_one = {
+	if = {
+		limit = {
+			OR = {
+				has_variable = te_pa_pm_$IG$
+				has_variable = te_pa_cmp_$IG$
+			}
+		}
+		clear_saved_scope = te_pa_pv_new
+		create_container = {
+			tags = { te_pa_pol_row }
+			parent = scope:te_pa_pv_home
+			save_scope_as = te_pa_pv_new
+		}
+		if = {
+			limit = { exists = scope:te_pa_pv_new }
+			scope:te_pa_pv_new = {
+				set_variable = { name = te_pa_pv_ig value = $N$ }
+				set_variable = { name = te_pa_pv_mult value = 0 }
+				set_variable = { name = te_pa_pv_cmp value = 0 }
+				set_variable = { name = te_pa_pv_gov value = 0 }
+				if = {
+					limit = { scope:te_pa_pv_home = { has_variable = te_pa_pm_$IG$ } }
+					set_variable = { name = te_pa_pv_mult value = scope:te_pa_pv_home.var:te_pa_pm_$IG$ }
+				}
+				if = {
+					limit = { scope:te_pa_pv_home = { has_variable = te_pa_cmp_$IG$ } }
+					set_variable = { name = te_pa_pv_cmp value = scope:te_pa_pv_home.var:te_pa_cmp_$IG$ }
+				}
+				if = {
+					limit = { scope:te_pa_pv_home = { ig:$IG$ ?= { is_in_government = yes } } }
+					set_variable = { name = te_pa_pv_gov value = 1 }
+				}
+			}
+			add_to_variable_list = { name = te_pa_pol_view target = scope:te_pa_pv_new }
+		}
+	}
+}
+
+# Country scope. The Politics section's figures again: its rows (destroyed and made anew, one a group with money on
+# it), the secret money at risk across the firms, and whether a campaign is under way. After each spend, each
+# quarter, and each month (the campaign).
+te_pa_pol_refresh = {
+	save_scope_as = te_pa_pv_home
+	te_pa_pol_view_clear = yes
+	te_pa_gen_pol_view_rebuild = yes
+	set_variable = { name = te_pa_pol_secret value = 0 }
+	every_company = {
+		limit = { te_pa_v_cm_secret > 0 }
+		save_scope_as = te_pa_pv_firm
+		scope:te_pa_pv_home = { change_variable = { name = te_pa_pol_secret add = scope:te_pa_pv_firm.var:te_pa_cm_secret } }
+	}
+	set_variable = { name = te_pa_pol_campaign value = 0 }
+	if = {
+		limit = { in_election_campaign = yes }
+		set_variable = { name = te_pa_pol_campaign value = 1 }
+	}
+}
+
+# Country scope. The Politics section's rows go.
+te_pa_pol_view_clear = {
+	if = {
+		limit = { has_variable_list = te_pa_pol_view }
+		every_in_list = {
+			variable = te_pa_pol_view
+			add_to_temporary_list = te_pa_pol_view_gone
+		}
+		every_in_list = {
+			list = te_pa_pol_view_gone
+			destroy_container = yes
+		}
+		clear_variable_list = te_pa_pol_view
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Sides (§ 8.2), country scope
+# ---------------------------------------------------------------------------
+
+# The sides' law has ended: settle them. A covered law is being enacted and no sides are open: open them on it.
+te_pa_sides_check = {
+	if = {
+		limit = {
+			has_variable = te_pa_side_law
+			te_pa_side_law_enacting = no
+		}
+		te_pa_sides_settle = yes
+	}
+	if = {
+		limit = {
+			NOT = { has_variable = te_pa_side_law }
+			te_pa_gen_enacting_law_index > 0
+		}
+		set_variable = { name = te_pa_side_law value = te_pa_gen_enacting_law_index }
+		set_variable = { name = te_pa_side_for value = 0 }
+		set_variable = { name = te_pa_side_against value = 0 }
+	}
+}
+
+# The enactment the sides were on has ended. Whether it passed is read first (te_pa_gen_law_n_in_force); then
+# te_pa_side_law goes, before anything is paid, so the settlement runs once for an ended law (a second check finds no
+# sides). Each firm that spent on the winning side gains te_pa_side_conn_win Connections, each on the losing side
+# loses te_pa_side_conn_lose; the largest on each side gets the ledger's line (verbs 41 and 42); the sides go.
+te_pa_sides_settle = {
+	save_scope_as = te_pa_side_home
+	set_variable = { name = te_pa_side_passed value = 0 }
+	if = {
+		limit = { te_pa_gen_law_n_in_force = { VAR = te_pa_side_law } }
+		set_variable = { name = te_pa_side_passed value = 1 }
+	}
+	set_variable = { name = te_pa_side_done value = var:te_pa_side_law }
+	remove_variable = te_pa_side_law
+	every_company = {
+		limit = { has_variable = te_pa_side_of }
+		if = {
+			limit = { te_pa_side_won = yes }
+			set_variable = { name = te_pa_conn value = te_pa_conn_after_side_win }
+		}
+		else = {
+			set_variable = { name = te_pa_conn value = te_pa_conn_after_side_lose }
+		}
+		te_pa_drop = { VAR = te_pa_side_of }
+		te_pa_drop = { VAR = te_pa_side_sign }
+		te_pa_drop = { VAR = te_pa_side_spent }
+	}
+	if = {
+		limit = { var:te_pa_side_passed ?= 1 }
+		te_pa_side_line = { TOP = te_pa_side_top_for_1 TOTAL = te_pa_side_for VERB = 41 }
+		te_pa_side_line = { TOP = te_pa_side_top_against_1 TOTAL = te_pa_side_against VERB = 42 }
+	}
+	else = {
+		te_pa_side_line = { TOP = te_pa_side_top_against_1 TOTAL = te_pa_side_against VERB = 41 }
+		te_pa_side_line = { TOP = te_pa_side_top_for_1 TOTAL = te_pa_side_for VERB = 42 }
+	}
+	te_pa_sides_clear = yes
+	te_pa_drop = { VAR = te_pa_side_passed }
+	te_pa_drop = { VAR = te_pa_side_done }
+}
+
+# A settled side's line, from its largest firm (TOP), with the side's money (TOTAL) and the law, while it spent.
+te_pa_side_line = {
+	if = {
+		limit = {
+			has_variable = $TOTAL$
+			var:$TOTAL$ > 0
+			var:$TOP$ ?= { has_variable = te_pa_init }
+		}
+		var:$TOP$ = { save_scope_as = te_pa_l_actor }
+		save_scope_value_as = { name = te_pa_l_size value = var:$TOTAL$ }
+		te_pa_ledger_add = { VERB = $VERB$ KNOWN = 1 }
+		if = {
+			limit = { exists = scope:te_pa_l_new }
+			scope:te_pa_l_new = { set_variable = { name = te_pa_l_law value = scope:te_pa_side_home.var:te_pa_side_done } }
+		}
+	}
+}
+
+# The sides' figures go (the settlement, and the teardown).
+te_pa_sides_clear = {
+	te_pa_drop = { VAR = te_pa_side_for }
+	te_pa_drop = { VAR = te_pa_side_against }
+	te_pa_drop = { VAR = te_pa_side_n_for }
+	te_pa_drop = { VAR = te_pa_side_n_against }
+	te_pa_drop = { VAR = te_pa_side_top_for_1 }
+	te_pa_drop = { VAR = te_pa_side_top_for_2 }
+	te_pa_drop = { VAR = te_pa_side_top_for_3 }
+	te_pa_drop = { VAR = te_pa_side_top_against_1 }
+	te_pa_drop = { VAR = te_pa_side_top_against_2 }
+	te_pa_drop = { VAR = te_pa_side_top_against_3 }
+	te_pa_drop = { VAR = te_pa_side_amt_for_1 }
+	te_pa_drop = { VAR = te_pa_side_amt_for_2 }
+	te_pa_drop = { VAR = te_pa_side_amt_for_3 }
+	te_pa_drop = { VAR = te_pa_side_amt_against_1 }
+	te_pa_drop = { VAR = te_pa_side_amt_against_2 }
+	te_pa_drop = { VAR = te_pa_side_amt_against_3 }
+}
+
+# The three largest firms on each side, and how many firms stand for and against (their stances now).
+te_pa_sides_top = {
+	te_pa_side_top_one = { SIDE = for SIGN = 1 POS = 0 N = 1 }
+	te_pa_side_top_one = { SIDE = for SIGN = 1 POS = 1 N = 2 }
+	te_pa_side_top_one = { SIDE = for SIGN = 1 POS = 2 N = 3 }
+	te_pa_side_top_one = { SIDE = against SIGN = -1 POS = 0 N = 1 }
+	te_pa_side_top_one = { SIDE = against SIGN = -1 POS = 1 N = 2 }
+	te_pa_side_top_one = { SIDE = against SIGN = -1 POS = 2 N = 3 }
+	set_variable = { name = te_pa_side_n_for value = te_pa_side_count_for }
+	set_variable = { name = te_pa_side_n_against value = te_pa_side_count_against }
+}
+
+te_pa_side_top_one = {
+	te_pa_drop = { VAR = te_pa_side_top_$SIDE$_$N$ }
+	te_pa_drop = { VAR = te_pa_side_amt_$SIDE$_$N$ }
+	clear_saved_scope = te_pa_side_pick
+	ordered_company = {
+		limit = {
+			te_pa_side_on_current = yes
+			var:te_pa_side_sign ?= $SIGN$
+			te_pa_v_side_spent > 0
+		}
+		order_by = te_pa_side_rank_order
+		position = $POS$
+		check_range_bounds = no
+		save_scope_as = te_pa_side_pick
+	}
+	if = {
+		limit = { exists = scope:te_pa_side_pick }
+		set_variable = { name = te_pa_side_top_$SIDE$_$N$ value = scope:te_pa_side_pick }
+		set_variable = { name = te_pa_side_amt_$SIDE$_$N$ value = scope:te_pa_side_pick.var:te_pa_side_spent }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The election (on_election_campaign_end, te_pa_on_actions.txt)
+# ---------------------------------------------------------------------------
+
+# Country scope, a campaign's end. Its month is marked; the wagers are read a month later (te_pa_politics_monthly),
+# once the new government has formed.
+te_pa_election_end = {
+	if = {
+		limit = { te_pa_on = yes }
+		set_variable = { name = te_pa_elect_end value = te_history_month_index }
+	}
+}
+
+# Country scope. The election is settled: its mark goes first, so it is settled once; every firm that backed a party
+# in it wins or loses its wager (te_pa_bet_settle: is the party's largest member in government?); the parties'
+# records of the campaign go.
+te_pa_election_settle = {
+	remove_variable = te_pa_elect_end
+	every_company = {
+		limit = { var:te_pa_bet_form ?= 1 }
+		te_pa_bet_settle = yes
+	}
+	te_pa_gen_campaign_clear = yes
+}
+
+# ---------------------------------------------------------------------------
+# The press (§ 8.5)
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn. Founds a press: the founding cost, then upkeep each quarter.
+te_pa_do_found_press = {
+	te_pa_spend_funds = { AMOUNT = te_pa_press_cost_value }
+	if = {
+		limit = { var:te_pa_spent ?= 1 }
+		set_variable = { name = te_pa_press value = te_pa_press_start }
+		save_scope_as = te_pa_press_new
+		scope:te_pa_home = {
+			if = {
+				limit = {
+					NOT = { is_target_in_variable_list = { name = te_pa_presses target = scope:te_pa_press_new } }
+				}
+				add_to_variable_list = { name = te_pa_presses target = scope:te_pa_press_new }
+			}
+		}
+		te_pa_ledger_firm = { VERB = 46 }
+	}
+}
+
+# Company scope, the quarter. Under Outlawed Dissent the press closes; otherwise upkeep through te_pa_spend_funds:
+# paid, it grows; unpaid, it decays; at 0 it is gone.
+te_pa_press_quarter = {
+	if = {
+		limit = { te_pa_v_press > 0 }
+		if = {
+			limit = { owner = { has_law = law_type:law_outlawed_dissent } }
+			te_pa_press_end = { VERB = 48 }
+		}
+		else = {
+			te_pa_spend_funds = { AMOUNT = te_pa_press_upkeep_value }
+			if = {
+				limit = { var:te_pa_spent ?= 1 }
+				set_variable = { name = te_pa_press value = te_pa_press_after_growth }
+			}
+			else = {
+				set_variable = { name = te_pa_press value = te_pa_press_after_decay }
+			}
+			if = {
+				limit = { te_pa_v_press <= 0 }
+				te_pa_press_end = { VERB = 48 }
+			}
+		}
+	}
+}
+
+# Company scope (scope:te_pa_home its country). The press ends (VERB 48 or 49): its record goes, it leaves the
+# country's list, and the firm founds no other for te_pa_press_again_months.
+te_pa_press_end = {
+	te_pa_drop = { VAR = te_pa_press }
+	set_variable = { name = te_pa_press_again value = te_pa_press_again_value }
+	save_scope_as = te_pa_press_gone
+	scope:te_pa_home = {
+		if = {
+			limit = { has_variable_list = te_pa_presses }
+			remove_list_variable = { name = te_pa_presses target = scope:te_pa_press_gone }
+		}
+	}
+	te_pa_ledger_firm = { VERB = $VERB$ }
+}
+
+# Company scope. Its owner's secret move is exposed after its press denied it (§ 8.5): the press is discredited
+# (verb 47), and ends at 0. Called from each exposure's costs, after the Standing it halved is paid.
+te_pa_press_discredit = {
+	if = {
+		limit = { te_pa_v_press > 0 }
+		set_variable = { name = te_pa_press value = te_pa_press_after_discredit }
+		te_pa_ledger_firm = { VERB = 47 }
+		if = {
+			limit = { te_pa_v_press <= 0 }
+			te_pa_press_end = { VERB = 48 }
+		}
+	}
+}
+
+# Country scope, the quarter (scope:te_pa_home): te_pa_presses again from the firms, a list a revolution's winner
+# doesn't inherit.
+te_pa_presses_rebuild = {
+	if = {
+		limit = { has_variable_list = te_pa_presses }
+		clear_variable_list = te_pa_presses
+	}
+	every_company = {
+		limit = {
+			has_variable = te_pa_init
+			te_pa_v_press > 0
+		}
+		save_scope_as = te_pa_press_entry
+		scope:te_pa_home = { add_to_variable_list = { name = te_pa_presses target = scope:te_pa_press_entry } }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Secret campaign money, exposed (te_pa_expose_rolls, te_pa_trust_effects.txt)
+# ---------------------------------------------------------------------------
+
+# Company scope (scope:te_pa_home its country). Its secret money comes out: its lines get their author, a line says
+# so (verb 45), it pays Standing (and, under Publicly Funded Elections, Connections) for it, what the money bought is
+# taken back from the group's patronage, and its press is discredited.
+te_pa_expose_cm = {
+	te_pa_ledger_reveal = { WHICH = cm }
+	save_scope_as = te_pa_l_actor
+	save_scope_value_as = { name = te_pa_l_size value = te_pa_v_cm_secret }
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = 45 KNOWN = 1 } }
+	set_variable = { name = te_pa_stand value = te_pa_stand_after_cm_exposure }
+	set_variable = { name = te_pa_conn value = te_pa_conn_after_cm_exposure }
+	if = {
+		limit = {
+			te_pa_v_cm_secret_units > 0
+			has_variable = te_pa_cm_secret_ig
+		}
+		clear_saved_scope = te_pa_cm_ig
+		var:te_pa_cm_secret_ig ?= { save_scope_as = te_pa_cm_ig }
+		save_scope_as = te_pa_cm_take_firm
+		scope:te_pa_home = {
+			set_variable = { name = te_pa_cm_stage value = scope:te_pa_cm_take_firm.var:te_pa_cm_secret_units }
+			te_pa_gen_pat_take = yes
+			remove_variable = te_pa_cm_stage
+		}
+	}
+	te_pa_press_discredit = yes
+	te_pa_drop = { VAR = te_pa_cm_secret }
+	te_pa_drop = { VAR = te_pa_cm_secret_units }
+	te_pa_drop = { VAR = te_pa_cm_secret_ig }
+	scope:te_pa_home = { te_pa_pol_refresh = yes }
+}
+
+# ---------------------------------------------------------------------------
+# The government's actions (§ 8.7): Close the Press, as te_pa_actions_effects.txt's are (country scope, the
+# government acting, with scope:te_pa_act_firm the firm). Its cost is the caller's (te_pa_sguis.txt, the AI below).
+# ---------------------------------------------------------------------------
+
+te_pa_sa_close_press = {
+	save_scope_as = te_pa_home
+	scope:te_pa_act_firm ?= {
+		te_pa_press_end = { VERB = 49 }
+		te_pa_row_sync = yes
+	}
+}
+
+# Country scope. What closing the press costs: nothing under Censorship for a Restrained firm (§ 8.5), the full
+# action's price otherwise (te_pa_sa_cost, by its Standing).
+te_pa_sa_close_press_cost = {
+	if = {
+		limit = { scope:te_pa_act_firm ?= { te_pa_press_close_free = yes } }
+		custom_tooltip = te_pa_sa_close_free_tt
+	}
+	else = {
+		te_pa_sa_cost = { SIZE = full }
+	}
+}
+
+# Country scope, the quarter. An AI government under Censorship closes a Restrained firm's press, which costs it
+# nothing (§ 8.5, § 12.1), one a quarter, in the ledger like the player's (§ 12.2 rule 1).
+te_pa_politics_ai_quarter = {
+	if = {
+		limit = {
+			is_ai = yes
+			has_law = law_type:law_censorship
+			any_company = {
+				te_pa_v_press > 0
+				te_pa_press_close_free = yes
+			}
+		}
+		random_company = {
+			limit = {
+				te_pa_v_press > 0
+				te_pa_press_close_free = yes
+			}
+			save_scope_as = te_pa_act_firm
+		}
+		te_pa_sa_close_press = yes
+		clear_saved_scope = te_pa_act_firm
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The month, the quarter, the teardown and the clear
+# ---------------------------------------------------------------------------
+
+# Country scope, each monthly pulse with the rule on (te_pa_monthly). An election a month past its end is settled; the
+# tab's campaign flag; the self-checks.
+te_pa_politics_monthly = {
+	if = {
+		limit = {
+			has_variable = te_pa_elect_end
+			te_history_month_index > var:te_pa_elect_end
+		}
+		te_pa_election_settle = yes
+	}
+	set_variable = { name = te_pa_pol_campaign value = 0 }
+	if = {
+		limit = { in_election_campaign = yes }
+		set_variable = { name = te_pa_pol_campaign value = 1 }
+	}
+	te_pa_debug_politics_monthly = yes
+}
+
+# Country scope, the quarter, before the firms (scope:te_pa_home): the sides checked (a law may have ended between
+# two turns), the presses' list again.
+te_pa_politics_quarter_start = {
+	te_pa_sides_check = yes
+	te_pa_presses_rebuild = yes
+}
+
+# Company scope, the quarter (te_pa_quarter's walk of the firms): its press, its secret money's decay, its
+# patronage wager.
+te_pa_politics_firm_quarter = {
+	te_pa_press_quarter = yes
+	if = {
+		limit = { te_pa_v_cm_secret > 0 }
+		set_variable = { name = te_pa_cm_secret value = te_pa_cm_secret_after_quarter }
+		set_variable = { name = te_pa_cm_secret_units value = te_pa_cm_secret_units_after_quarter }
+		if = {
+			limit = { te_pa_v_cm_secret < te_pa_cm_secret_floor }
+			te_pa_drop = { VAR = te_pa_cm_secret }
+			te_pa_drop = { VAR = te_pa_cm_secret_units }
+			te_pa_drop = { VAR = te_pa_cm_secret_ig }
+		}
+	}
+	te_pa_bet_quarter = yes
+}
+
+# Country scope, the quarter, after the firms. The sides ranked; the patronage modifiers' one refresh site (the
+# generated te_pa_gen_patronage_quarter: each group's total decays and its modifier is replaced); the Politics
+# section's figures; an AI government's Close the Press.
+te_pa_politics_quarter = {
+	if = {
+		limit = { has_variable = te_pa_side_law }
+		te_pa_sides_top = yes
+	}
+	te_pa_gen_patronage_quarter = yes
+	te_pa_pol_refresh = yes
+	te_pa_politics_ai_quarter = yes
+}
+
+# Country scope, te_pa_teardown (the rule switched off). Every group's patronage modifier off; the Politics section's
+# rows and the presses' list go; an election awaiting its settlement is let go. The totals, the sides and the firms'
+# records stay, so switching the rule back on re-applies the modifiers at the next quarter.
+te_pa_politics_teardown = {
+	te_pa_gen_patronage_remove_all = yes
+	te_pa_pol_view_clear = yes
+	if = {
+		limit = { has_variable_list = te_pa_presses }
+		clear_variable_list = te_pa_presses
+	}
+	te_pa_drop = { VAR = te_pa_elect_end }
+	te_pa_drop = { VAR = te_pa_pol_campaign }
+}
+
+# Company scope, te_pa_clear_firm (the company disbanded; scope:te_pa_home its country): its press, its sides, its
+# stake, its money and its wager go.
+te_pa_politics_clear = {
+	if = {
+		limit = { te_pa_v_press > 0 }
+		save_scope_as = te_pa_press_gone
+		scope:te_pa_home = {
+			if = {
+				limit = { has_variable_list = te_pa_presses }
+				remove_list_variable = { name = te_pa_presses target = scope:te_pa_press_gone }
+			}
+		}
+	}
+	te_pa_drop = { VAR = te_pa_press }
+	te_pa_drop = { VAR = te_pa_press_again }
+	te_pa_drop = { VAR = te_pa_stake_law }
+	te_pa_drop = { VAR = te_pa_stake_sign }
+	te_pa_drop = { VAR = te_pa_stake_trade }
+	te_pa_drop = { VAR = te_pa_side_of }
+	te_pa_drop = { VAR = te_pa_side_sign }
+	te_pa_drop = { VAR = te_pa_side_spent }
+	te_pa_drop = { VAR = te_pa_speed_month }
+	te_pa_drop = { VAR = te_pa_campaign_total }
+	te_pa_drop = { VAR = te_pa_cm_secret }
+	te_pa_drop = { VAR = te_pa_cm_secret_units }
+	te_pa_drop = { VAR = te_pa_cm_secret_ig }
+	te_pa_drop = { VAR = te_pa_bet_ig }
+	te_pa_drop = { VAR = te_pa_bet_form }
+	te_pa_drop = { VAR = te_pa_bet_out }
+	te_pa_drop = { VAR = te_pa_bet_until }
+}

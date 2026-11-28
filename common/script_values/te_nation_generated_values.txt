@@ -141,6 +141,43 @@ te_nation_src_governance_count = {
 	}
 }
 
+# Used by: the monthly pulse, for te_nation_src_private_actors
+te_nation_src_private_actors_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_armed_forces }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_devout }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_industrialists }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_intelligentsia }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_landowners }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_petty_bourgeoisie }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_rural_folk }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_trade_unions }
+		add = 1
+	}
+}
+
 # Used by: the monthly pulse, for te_nation_src_family_measures
 te_nation_src_family_measures_count = {
 	value = 0
@@ -822,10 +859,14 @@ te_nation_src_foreign_count = {
 te_nation_list_governance_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_0c8cff10 }
+		limit = { has_variable = te_nation_src_set_ab5bb4b4 }
 		if = {
 			limit = { var:te_nation_src_governance > 0 }
 			add = te_nation_src_governance_count
+		}
+		if = {
+			limit = { var:te_nation_src_private_actors > 0 }
+			add = te_nation_src_private_actors_count
 		}
 	}
 }
@@ -834,7 +875,7 @@ te_nation_list_governance_count = {
 te_nation_list_society_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_0c8cff10 }
+		limit = { has_variable = te_nation_src_set_ab5bb4b4 }
 		if = {
 			limit = { var:te_nation_src_living_standards > 0 }
 			add = te_nation_src_living_standards_count
@@ -885,7 +926,7 @@ te_nation_list_society_count = {
 te_nation_list_economy_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_0c8cff10 }
+		limit = { has_variable = te_nation_src_set_ab5bb4b4 }
 		if = {
 			limit = { var:te_nation_src_construction > 0 }
 			add = te_nation_src_construction_count
@@ -929,7 +970,7 @@ te_nation_list_economy_count = {
 te_nation_list_science_and_space_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_0c8cff10 }
+		limit = { has_variable = te_nation_src_set_ab5bb4b4 }
 		if = {
 			limit = { var:te_nation_src_transhumanism > 0 }
 			if = {
@@ -952,7 +993,7 @@ te_nation_list_science_and_space_count = {
 te_nation_list_international_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_0c8cff10 }
+		limit = { has_variable = te_nation_src_set_ab5bb4b4 }
 		if = {
 			limit = { var:te_nation_src_nuclear_order > 0 }
 			add = te_nation_src_nuclear_order_count
@@ -1179,6 +1220,38 @@ te_nation_types_governance_count = {
 	}
 	if = {
 		limit = { has_modifier = te_officer_academies_standing }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_armed_forces }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_devout }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_industrialists }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_intelligentsia }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_landowners }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_petty_bourgeoisie }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_rural_folk }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_trade_unions }
 		add = 1
 	}
 	if = {
@@ -1712,6 +1785,38 @@ te_nation_group_interest_groups_count = {
 	}
 	if = {
 		limit = { has_modifier = te_officer_academies_standing }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_armed_forces }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_devout }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_industrialists }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_intelligentsia }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_landowners }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_petty_bourgeoisie }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_rural_folk }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_trade_unions }
 		add = 1
 	}
 	if = {
@@ -2309,6 +2414,73 @@ te_nation_type_interest_group_ig_armed_forces_pol_str_mult_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = te_officer_academies_standing }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_armed_forces }
+		add = 1
+	}
+}
+
+# Used by: the interest_group_ig_devout_pol_str_mult row
+te_nation_type_interest_group_ig_devout_pol_str_mult_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_devout }
+		add = 1
+	}
+}
+
+# Used by: the interest_group_ig_industrialists_pol_str_mult row
+te_nation_type_interest_group_ig_industrialists_pol_str_mult_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_industrialists }
+		add = 1
+	}
+}
+
+# Used by: the interest_group_ig_intelligentsia_pol_str_mult row
+te_nation_type_interest_group_ig_intelligentsia_pol_str_mult_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_intelligentsia }
+		add = 1
+	}
+}
+
+# Used by: the interest_group_ig_landowners_pol_str_mult row
+te_nation_type_interest_group_ig_landowners_pol_str_mult_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_landowners }
+		add = 1
+	}
+}
+
+# Used by: the interest_group_ig_petty_bourgeoisie_pol_str_mult row
+te_nation_type_interest_group_ig_petty_bourgeoisie_pol_str_mult_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_petty_bourgeoisie }
+		add = 1
+	}
+}
+
+# Used by: the interest_group_ig_rural_folk_pol_str_mult row
+te_nation_type_interest_group_ig_rural_folk_pol_str_mult_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_rural_folk }
+		add = 1
+	}
+}
+
+# Used by: the interest_group_ig_trade_unions_pol_str_mult row
+te_nation_type_interest_group_ig_trade_unions_pol_str_mult_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_pa_patronage_ig_trade_unions }
 		add = 1
 	}
 }

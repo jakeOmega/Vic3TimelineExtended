@@ -96,6 +96,8 @@ class GeneratedModifiersTest(unittest.TestCase):
                     self.assertIn(prefix + s.company, self.modifiers)
         expected = {p + s.company for s in self.sectors
                     for p in (gen.CARTEL_PREFIX, gen.CARTEL_SECRET_PREFIX, gen.FOUNDATION_PREFIX)}
+        # Task 5a's patronage modifiers, one an interest group type (test_private_actors_politics.py holds them)
+        expected |= {gen.PATRONAGE_PREFIX + ig for ig in plan().igs}
         self.assertEqual(set(self.modifiers), expected, "a generated modifier for no sector")
 
     def test_cartels_carry_exactly_the_types_building_types(self):
@@ -260,7 +262,7 @@ class DispatchTest(unittest.TestCase):
 
     def test_every_listed_verb_has_a_trigger_and_an_effect(self):
         lists = [name for name in self.effects if name.startswith("te_pa_act_")]
-        self.assertEqual(set(lists), {"te_pa_act_inputs", "te_pa_act_market", "te_pa_act_dominance"})
+        self.assertEqual(set(lists), {"te_pa_act_inputs", "te_pa_act_market", "te_pa_act_dominance", "te_pa_act_law"})
         verbs = set()
         for name in lists + ["te_pa_act"]:
             for key, value in walk(self.effects[name][1]):
@@ -268,14 +270,15 @@ class DispatchTest(unittest.TestCase):
                     verbs.add(key.removeprefix("te_pa_can_"))
                 elif key.startswith("te_pa_do_"):
                     verbs.add(key.removeprefix("te_pa_do_"))
-        self.assertGreaterEqual(verbs, {"stall", "form_cartel", "capture_reg", "expand", "press_cartel", "endow"})
+        self.assertGreaterEqual(verbs, {"stall", "form_cartel", "capture_reg", "expand", "press_cartel", "endow",
+                                        "speed", "campaign", "back_side", "found_press"})
         for verb in sorted(verbs):
             with self.subTest(verb=verb):
                 self.assertIn(f"te_pa_can_{verb}", self.triggers)
                 self.assertIn(f"te_pa_do_{verb}", self.effects)
 
     def test_each_branch_pairs_its_trigger_with_its_effect(self):
-        for name in ("te_pa_act_inputs", "te_pa_act_market", "te_pa_act_dominance"):
+        for name in ("te_pa_act_inputs", "te_pa_act_market", "te_pa_act_dominance", "te_pa_act_law"):
             for key, value in items(self.effects[name][1]):
                 self.assertIn(key, ("if", "else_if"))
                 branch = dict(items(value))

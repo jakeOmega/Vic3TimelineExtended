@@ -624,7 +624,8 @@ one-state country builds one only once it has an agreement with a neighbor.
 With the Private Actors game rule on (it is off by default, and experimental),
 every company is a firm: an actor with an aim of its own, chosen each year from
 its position, three currencies, and holdings it builds: cartels, captured
-regulators and foundations, and petitions you answer. You set a posture toward each of your firms and can act against them. The Private Actors tab of the Timeline Extended window shows what each
+regulators, foundations and presses, money it puts behind the side it takes on
+your laws, and petitions you answer. You set a posture toward each of your firms and can act against them. The Private Actors tab of the Timeline Extended window shows what each
 firm wants and why, for your country or, in National Info, any other.
 
 ### Firms and their goals
@@ -657,11 +658,13 @@ it ("Why: Coal costs 40% more than its base price").
 Each firm keeps three currencies. Funds are its claim on your investment pool,
 a tenth a year of its estimated dividends, capped at five years' worth; none
 accrue under Command Economy or Cooperative Ownership. The pool keeps the money
-until the firm spends it: what a firm spends on a foundation or on exposing a
-cartel leaves your investment pool, never more than the pool holds.
+until the firm spends it: what a firm spends on a foundation, a press, campaign
+money or exposing a cartel leaves your investment pool, never more than the
+pool holds.
 Connections, from 0 to 100, are its reach into government: they grow with its
 years and while its executive's interest group is in government, fade a little
-each quarter, and pay for stalling a law and for a captured regulator.
+each quarter, and pay for stalling or speeding a law and for a captured
+regulator.
 Standing, from 0 to 100, is how the public regards it: it drifts toward 50, a
 foundation raises it, and an exposure costs it 15. You get a notification when one of your firms
 starts failing or comes to hold 40% of its sector, once each time it crosses
@@ -685,8 +688,8 @@ share of its sector and its Grievance.
 The Ledger, collapsed until you open it, lists the last 20 things your firms
 did, newest first: a new goal and why, a new executive, a firm failing or
 coming to hold 40% of its sector, a firm founded or dissolved, a change of
-posture, the trust's moves, petitions and how they were answered, and your
-actions against a firm. A secret move's line reads "Author
+posture, the trust's moves, its political money and its press, petitions and
+how they were answered, and your actions against a firm. A secret move's line reads "Author
 unknown: a firm …" until it is exposed. National Info shows another country's tab, all of it but the posture
 buttons. The "?" in the header opens How Private Actors Work.
 
@@ -702,7 +705,7 @@ ledger.
 |---|---|
 | Favored | Its Connections grow half again as fast, it supports Dirigiste Policy, under which it may hold a cartel in the open, and it endows its foundation in your state with the lowest literacy. A petition you leave unanswered is granted |
 | Tolerated (the default) | Its Connections grow at the usual pace, and it opposes Dirigiste Policy. You stand aside from a petition you leave unanswered |
-| Restrained | Its Connections grow at half the pace, its Grievance rises by one every five years, and it opposes Dirigiste Policy. A petition you leave unanswered is refused |
+| Restrained | Its Connections grow at half the pace, its Grievance rises by one every five years, and it opposes Dirigiste Policy. A petition you leave unanswered is refused. Under Censorship it may keep no press, and closing its press costs you nothing |
 
 An AI government sets its posture toward each of its firms at the firm's turn:
 Favored while the firm's executive's interest group is in government or the
@@ -795,6 +798,7 @@ grayed one says what it lacks, and each says on hover what it does and costs.
 | Audit the Regulator | A law with a regulator; once a year | Usually finds and breaks a captured regulator; a miss still weakens it, unseen |
 | Levy on Rents | An open, legal cartel | Each quarter the treasury takes half of what the cartel adds to the firm's Funds, out of the investment pool, until you lift it; Grievance +1 |
 | Grant a Charter | Guilds and Chartered Monopolies and a cartel you know of | The charter above, unasked |
+| Close the Press | A press, and Censorship or a suit you won against the firm in the last ten years | Closes the firm's press; it may found no other for five years. Free for a Restrained firm under Censorship |
 
 Moving against a firm costs approval with its executive's interest group, up to
 4 for five years, and radicals in its seat, both more the higher its Standing;
@@ -811,6 +815,57 @@ holds 40% of its sector while its good sells well above its base price, never a
 Favored one. With the game rule on, a known cartel can also bring Too Large to
 Break, the petition for National Champion Exemption, in good times as in bad,
 naming the firm with the largest one.
+
+### Politics at home
+
+Firms take sides on the laws their sectors weigh. While you enact one of them,
+the Politics section of the tab names the law and what the firms for and
+against it have put in, with the three that have put in most on each side. A
+firm whose goal is A Friendly Law puts money behind its side every year, and
+others only when the law weighs heavily on their sector, at half as much. When
+the enactment ends, every firm that paid for the winning side gains 5
+Connections and every firm on the losing side loses 5.
+
+A firm can also spend 20 Connections on the law itself, once a year: a setback
+for a law it opposes, or ten points of progress toward the next checkpoint for
+one it wants. All your firms together give a law at most one setback and one
+push a year. Coal and oil firms oppose the Fossil Expansion Moratorium and the
+Managed Fossil Phaseout this way.
+
+A firm's money is campaign money, given to the side that stands best on its
+law, or to its executive's interest group when no side does:
+
+| When | The money buys |
+|---|---|
+| During an election campaign | Momentum for the party whose interest groups stand best on the firm's law. You get one notification a campaign when the firms together have bought one party more than a medium election event would |
+| At any other time, or without elections | Patronage: political strength for the interest group that stands best on its law, up to +20%, fading over about three years once the money stops. It shows as Patronage from Firms in your country's modifiers |
+
+If the party it backed is in government after the election, or the group it
+patronized enters government, the firm gains 10 Connections; if not, it loses
+5. Your Electoral Finance law decides how much may be given in the open:
+
+| Electoral Finance law | Campaign money |
+|---|---|
+| No Campaign Finance Laws | Patronage only, open and unlimited |
+| Unregulated Donations | Open and unlimited |
+| Donation Limits | Open up to 1% of your investment pool's yearly income a firm each time; a bold executive gives the rest in secret |
+| Publicly Funded Elections | Only in secret, by a bold executive, and at half effect |
+
+Secret money shows in the Politics section as a sum with the author unknown.
+It may be exposed each year, as a secret cartel may, and more likely during an
+Inquiry; exposed, the firm loses 10 Standing (15, and 10 Connections, under
+Publicly Funded Elections), and the patronage it bought is taken back.
+
+A firm with a secret to hide or a law at stake, and a year's Funds to spare,
+may found a press. Its strength grows 8 a year while its upkeep is paid. At
+100, the chance that its own secrets are exposed falls 30 points, that of the
+firms on the other side of its law and of a cartel that sells it its inputs
+rises 30, its campaign money goes a quarter further, and an exposure costs it
+half the Standing; two presses on opposite sides cancel out. When one of its
+secrets is exposed anyway, the press loses 30 strength. Your speech law decides
+what you can do about it: Outlawed Dissent closes every press, Censorship lets
+you close one with Close the Press, and under Right of Assembly or Protected
+Speech you can close one only after winning a suit against the firm.
 
 ## Tariffs for all goods at once
 

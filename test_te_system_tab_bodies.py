@@ -129,7 +129,8 @@ WINDOW_BODIES = [
      None),
     ("te_pa_tab_body", os.path.join(REPO, "gui", "te_pa_widgets.gui"),
      "te_pa_tab_header", "te_window_private_actors_tab_sgui", None,
-     "te_pa_tab_layout", ["te_pa_overview_panel", "te_pa_roster_panel", "te_pa_ledger_panel"],
+     "te_pa_tab_layout", ["te_pa_overview_panel", "te_pa_roster_panel", "te_pa_politics_panel",
+                          "te_pa_ledger_panel"],
      None),
 ]
 

@@ -62,8 +62,9 @@
 ###     petition needs no GUI: te_pa_row_move_kind names it); the state's
 ###     actions are te_pa_actions at the foot of te_pa_firm_detail. Tasks 5
 ###     and 6 add their actions' buttons there, a te_pa_action_button each.
-###   - Task 5's Politics section and Task 9's Abroad section: the marked
-###     places in te_pa_tab_layout and te_pa_wide_sections.
+###   - Task 5a's Politics section (te_pa_politics_panel) sits after the
+###     roster, and in te_pa_wide_sections' third column above the ledger;
+###     Task 9's Abroad section goes beside it, where marked.
 
 template te_pa_fontsize_row {
 	fontsize = 17
@@ -1052,6 +1053,12 @@ types te_pa_widget_types
 			tooltip = "te_pa_det_griev_tt"
 			text = "te_pa_det_griev"
 		}
+		### Task 5a: its campaign money in all, and what it has put behind its
+		### side of the law being enacted.
+		te_pa_line = {
+			tooltip = "te_pa_det_money_tt"
+			text = "te_pa_det_money"
+		}
 
 		te_pa_subheader = {
 			blockoverride "subheader_text" {
@@ -1191,6 +1198,16 @@ types te_pa_widget_types
 						text = "te_pa_sa_charter_btn"
 					}
 				}
+				### Task 5a, § 8.7: Close the Press.
+				te_pa_action_button = {
+					datacontext = "[GetScriptedGui('te_pa_sa_close_press_sgui')]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+					tooltip = "te_pa_sa_close_press_btn_tt"
+					blockoverride "action_text" {
+						text = "te_pa_sa_close_press_btn"
+					}
+				}
 			}
 		}
 	}
@@ -1231,12 +1248,142 @@ types te_pa_widget_types
 		}
 	}
 
-	### Task 5: the Politics section (te_pa_politics_panel: the law being
-	### enacted with the firms for and against it and their spending, campaign
-	### money by party, patronage by interest group) goes here, as a type of
-	### its own placed in te_pa_tab_layout and te_pa_wide_sections.
+	### ----------------------------------------------------------------------
+	### Politics (Task 5a; spec §§ 8.2, 8.3, 14): the law being enacted, with
+	### what the firms for and against it have put behind their sides and the
+	### three largest on each (te_pa_side_*, stored at each side's spend and
+	### each quarter); then campaign money and patronage, a row an interest
+	### group with money on it (the country list te_pa_pol_view, rebuilt at
+	### each spend and quarter, te_pa_pol_refresh): its party's campaign money
+	### this election and the political strength its patronage gives; then the
+	### secret money still at risk, as a sum with the author unknown. A
+	### heading's right says whether a campaign is under way. Reads Country's
+	### stored figures through the guarded te_pa_pol_* values; a row's hover
+	### reads its container alone (gotcha #24).
+	### ----------------------------------------------------------------------
+	type te_pa_politics_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_pa_panel = {
+			te_pa_heading = {
+				blockoverride "heading_text" {
+					text = "te_pa_pol_header"
+				}
+				blockoverride "heading_right" {
+					tooltip = "te_pa_pol_campaign_tt"
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_campaign_value'), '(CFixedPoint)0' ), 'te_pa_pol_campaign_on', 'te_pa_pol_campaign_off' )]"
+				}
+			}
+			te_pa_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_pa_pol_law_sub"
+				}
+			}
+			te_pa_note = {
+				visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_has_law'), '(CFixedPoint)0' ) )]"
+				tooltip = "te_pa_pol_law_none_tt"
+				text = "te_pa_pol_law_none"
+			}
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_has_law'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				te_pa_line = {
+					tooltip = "te_pa_pol_law_tt"
+					text = "te_pa_pol_law"
+				}
+				### For and against, a column each (236 + 8 + 236 = 480), each
+				### side's sum over its three largest firms.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 8
+
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+
+						te_pa_cell = {
+							tooltip = "te_pa_pol_for_tt"
+							text = "te_pa_pol_for"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_amt_for_1'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_for_1"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_amt_for_2'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_for_2"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_amt_for_3'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_for_3"
+						}
+					}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+
+						te_pa_cell = {
+							tooltip = "te_pa_pol_against_tt"
+							text = "te_pa_pol_against"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_amt_against_1'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_against_1"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_amt_against_2'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_against_2"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_amt_against_3'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_against_3"
+						}
+					}
+				}
+			}
+			te_pa_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_pa_pol_money_sub"
+				}
+			}
+			te_pa_note = {
+				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_pa_pol_view') )]"
+				tooltip = "te_pa_pol_money_none_tt"
+				text = "te_pa_pol_money_none"
+			}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				datamodel = "[Country.MakeScope.GetList('te_pa_pol_view')]"
+
+				item = {
+					te_pa_line = {
+						datacontext = "[Scope.GetScriptContainer]"
+						tooltip = "te_pa_pol_row_tt"
+						text = "[SelectLocalization( GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_pv_cmp'), '(CFixedPoint)0' ), 'te_pa_pol_row_cmp', 'te_pa_pol_row_pat' )]"
+					}
+				}
+			}
+			te_pa_line = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_secret_value'), '(CFixedPoint)0' )]"
+				tooltip = "te_pa_pol_secret_tt"
+				text = "te_pa_pol_secret"
+			}
+		}
+	}
+
 	### Task 9: the Abroad section (te_pa_abroad_panel: foreign firms'
-	### concessions here, this country's firms' concessions by host) likewise.
+	### concessions here, this country's firms' concessions by host) goes
+	### here, as a type of its own placed in te_pa_tab_layout and
+	### te_pa_wide_sections column 3, as the Politics section is.
 
 	### ----------------------------------------------------------------------
 	### The ledger (rule 1: a list of past items, collapsed; te_pa_ledger_open):
@@ -1384,6 +1531,14 @@ types te_pa_widget_types
 		}
 		te_pa_subheader = {
 			blockoverride "subheader_text" {
+				text = "te_pa_how_sub_politics"
+			}
+		}
+		te_pa_note = {
+			text = "te_pa_how_politics"
+		}
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
 				text = "te_pa_how_sub_rule"
 			}
 		}
@@ -1442,7 +1597,8 @@ types te_pa_widget_types
 			block "te_pa_tab_layout" {
 				te_pa_overview_panel = {}
 				te_pa_roster_panel = {}
-				### Task 5: te_pa_politics_panel = {} here; Task 9: te_pa_abroad_panel = {}.
+				te_pa_politics_panel = {}
+				### Task 9: te_pa_abroad_panel = {} here.
 				te_pa_ledger_panel = {}
 			}
 		}
@@ -1453,8 +1609,8 @@ types te_pa_widget_types
 	### § 7), te_pa_tab_layout's override in the window's full-screen frame: the
 	### overview, the roster, then the ledger, one to a column of a fixed 520
 	### (te_ui_columns_three), in the tab's order. The roster is the long one
-	### and has its column; Task 5's Politics and Task 9's Abroad go in column 3,
-	### above the ledger. The tab's gate stays on the frame's parent, and none
+	### and has its column; Task 5a's Politics, and Task 9's Abroad, sit in
+	### column 3 above the ledger. The tab's gate stays on the frame's parent, and none
 	### of the three hides while the tab is open, so the three columns always
 	### draw.
 	type te_pa_wide_sections = te_ui_columns_three {
@@ -1467,6 +1623,7 @@ types te_pa_widget_types
 		}
 
 		blockoverride "column_3" {
+			te_pa_politics_panel = {}
 			te_pa_ledger_panel = {}
 		}
 	}

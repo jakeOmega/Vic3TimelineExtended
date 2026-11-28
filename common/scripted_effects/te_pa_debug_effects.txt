@@ -17,6 +17,12 @@
 #                    building of the type at its seat, fall by the cut the cartel's strength asks
 #   charter_monopoly (armed at the first charter granted, te_pa_charter_grant; read at the owner's next monthly pulse)
 #                    add_company_monopoly = bt:<its main building type> gives the company the engine's monopoly on it
+#   law_progress     (armed at the first speed, te_pa_do_speed, before its add_law_progress; read at the country's next
+#                    monthly pulse) probe 10: progress added from a pulse leaves the enactment sound, a firm's setback
+#                    on the same law in the same year or not
+#   momentum_from_pulse (armed at the first campaign money that buys momentum, te_pa_campaign_spend; read in the same
+#                    effect and at the country's next monthly pulse) probe 9: add_momentum from a pulse moves the
+#                    party's momentum, whatever the party
 
 # Company scope, inside the turn (scope:te_pa_exec_now its executive, when it has one).
 te_pa_debug_turn = {
@@ -294,6 +300,186 @@ te_pa_debug_monthly = {
 	te_pa_debug_law_available = yes
 	te_pa_debug_rents_read = yes
 	te_pa_debug_charter_read = yes
+}
+
+# Country scope, each monthly pulse with the rule on (te_pa_politics_monthly): Task 5a's reads.
+te_pa_debug_politics_monthly = {
+	te_pa_debug_progress_read = yes
+	te_pa_debug_momentum_read = yes
+}
+
+# law_progress (probe 10), armed in country scope inside te_pa_do_speed just before the first add_law_progress: the
+# law (the table's number), the enactment's phase and setbacks before it, and whether a firm set the same law back in
+# the last year (te_pa_stall_law_recent: "a setback and progress in one year"). Degenerate inputs left out: an
+# enactment one setback from failing, which a natural setback could end.
+te_pa_debug_progress_arm = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_pa_sc_prog_done }
+			NOT = { has_global_variable = te_pa_sc_prog_armed }
+			te_pa_gen_enacting_law_index > 0
+			enactment_setback_count < max_setbacks_minus_one
+		}
+		set_global_variable = { name = te_pa_sc_prog_armed value = 1 }
+		set_global_variable = { name = te_pa_sc_prog_country value = this }
+		set_global_variable = { name = te_pa_sc_prog_month value = te_history_month_index }
+		set_global_variable = { name = te_pa_sc_prog_phase0 value = te_pa_sc_phase_value }
+		set_global_variable = { name = te_pa_sc_prog_setbacks0 value = te_pa_sc_setbacks_value }
+		set_global_variable = { name = te_pa_sc_prog_with_setback value = te_pa_stall_law_recent }
+		set_variable = { name = te_pa_sc_prog_law value = te_pa_gen_enacting_law_index }
+	}
+}
+
+# Country scope, the armed country, a month or more after arming. OK: the same law is still being enacted at its phase
+# or later, or it has passed (in force). BROKEN: it is being enacted at an earlier phase (the progress set it back), or
+# the country enacts another law or nothing and the watched law is not in force (the enactment broke; or the law
+# failed on its own: read the law panel). The checkpoint's progress itself has no script read: the play-test list
+# watches the law panel's bar move ten points. Fallback: a timed country_law_enactment_success_add modifier in place
+# of add_law_progress, as vanilla's strike events use.
+te_pa_debug_progress_read = {
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_prog_armed
+			NOT = { has_global_variable = te_pa_sc_prog_done }
+			this = global_var:te_pa_sc_prog_country
+			te_history_month_index > global_var:te_pa_sc_prog_month
+		}
+		set_global_variable = { name = te_pa_sc_prog_done value = 1 }
+		set_global_variable = { name = te_pa_sc_prog_phase1 value = te_pa_sc_phase_value }
+		set_global_variable = { name = te_pa_sc_prog_setbacks1 value = te_pa_sc_setbacks_value }
+		set_global_variable = { name = te_pa_sc_prog_same value = 0 }
+		set_global_variable = { name = te_pa_sc_prog_passed value = 0 }
+		if = {
+			limit = {
+				te_pa_gen_enacting_law_index >= var:te_pa_sc_prog_law
+				te_pa_gen_enacting_law_index <= var:te_pa_sc_prog_law
+			}
+			set_global_variable = { name = te_pa_sc_prog_same value = 1 }
+		}
+		if = {
+			limit = { te_pa_gen_law_n_in_force = { VAR = te_pa_sc_prog_law } }
+			set_global_variable = { name = te_pa_sc_prog_passed value = 1 }
+		}
+		if = {
+			limit = {
+				OR = {
+					global_var:te_pa_sc_prog_passed ?= 1
+					AND = {
+						global_var:te_pa_sc_prog_same ?= 1
+						global_var:te_pa_sc_prog_phase1 >= global_var:te_pa_sc_prog_phase0
+					}
+				}
+			}
+			debug_log = "TE_SELF_CHECK OK law_progress same=[GetGlobalVariable('te_pa_sc_prog_same').GetValue|0] passed=[GetGlobalVariable('te_pa_sc_prog_passed').GetValue|0] phase=[GetGlobalVariable('te_pa_sc_prog_phase0').GetValue|0]>[GetGlobalVariable('te_pa_sc_prog_phase1').GetValue|0] setbacks=[GetGlobalVariable('te_pa_sc_prog_setbacks0').GetValue|0]>[GetGlobalVariable('te_pa_sc_prog_setbacks1').GetValue|0] with_setback=[GetGlobalVariable('te_pa_sc_prog_with_setback').GetValue|0] country=[THIS.GetCountry.GetTagName] (add_law_progress from a pulse leaves the enactment sound; watch the law panel's bar move ten points) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN law_progress same=[GetGlobalVariable('te_pa_sc_prog_same').GetValue|0] passed=[GetGlobalVariable('te_pa_sc_prog_passed').GetValue|0] phase=[GetGlobalVariable('te_pa_sc_prog_phase0').GetValue|0]>[GetGlobalVariable('te_pa_sc_prog_phase1').GetValue|0] setbacks=[GetGlobalVariable('te_pa_sc_prog_setbacks0').GetValue|0]>[GetGlobalVariable('te_pa_sc_prog_setbacks1').GetValue|0] with_setback=[GetGlobalVariable('te_pa_sc_prog_with_setback').GetValue|0] country=[THIS.GetCountry.GetTagName] (same=1 and an earlier phase: the progress set the enactment back; same=0 and passed=0: the enactment ended unpassed, broken or failed on its own. Fallback: a timed country_law_enactment_success_add modifier in place of add_law_progress) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_variable = te_pa_sc_prog_law
+		remove_global_variable = te_pa_sc_prog_armed
+		remove_global_variable = te_pa_sc_prog_country
+		remove_global_variable = te_pa_sc_prog_month
+		remove_global_variable = te_pa_sc_prog_phase0
+		remove_global_variable = te_pa_sc_prog_phase1
+		remove_global_variable = te_pa_sc_prog_setbacks0
+		remove_global_variable = te_pa_sc_prog_setbacks1
+		remove_global_variable = te_pa_sc_prog_with_setback
+		remove_global_variable = te_pa_sc_prog_same
+		remove_global_variable = te_pa_sc_prog_passed
+	}
+}
+
+# momentum_from_pulse (probe 9), armed in company scope inside te_pa_campaign_spend just before the first add_momentum
+# (scope:te_pa_cm_party the party, scope:te_pa_stake_firm the firm): the party, its momentum before, the momentum the
+# money buys, and whether the party is in government (probe 9's "for any party"). Degenerate inputs left out: an
+# amount under te_pa_sc_mom_min, which a read could not tell from nothing.
+te_pa_debug_momentum_arm = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_pa_sc_mom_done }
+			NOT = { has_global_variable = te_pa_sc_mom_armed }
+			exists = scope:te_pa_cm_party
+			te_pa_cm_momentum_value >= te_pa_sc_mom_min
+		}
+		set_global_variable = { name = te_pa_sc_mom_armed value = 1 }
+		set_global_variable = { name = te_pa_sc_mom_party value = scope:te_pa_cm_party }
+		set_global_variable = { name = te_pa_sc_mom_month value = te_history_month_index }
+		set_global_variable = { name = te_pa_sc_mom_want value = te_pa_cm_momentum_value }
+		set_global_variable = { name = te_pa_sc_mom_gov value = 0 }
+		owner = { set_global_variable = { name = te_pa_sc_mom_country value = this } }
+		scope:te_pa_cm_party = {
+			set_global_variable = { name = te_pa_sc_mom_before value = te_pa_party_momentum }
+			if = {
+				limit = { any_member = { is_in_government = yes } }
+				set_global_variable = { name = te_pa_sc_mom_gov value = 1 }
+			}
+		}
+	}
+}
+
+# Company scope, in te_pa_campaign_spend straight after the armed add_momentum: the party's momentum read at once.
+te_pa_debug_momentum_after = {
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_mom_armed
+			NOT = { has_global_variable = te_pa_sc_mom_now }
+		}
+		scope:te_pa_cm_party ?= {
+			set_global_variable = { name = te_pa_sc_mom_now value = te_pa_party_momentum }
+		}
+	}
+}
+
+# Country scope, the armed country, a month or more after arming. OK: the momentum read at once rose by half the
+# amount or more (te_pa_sc_mom_now_gap). BROKEN otherwise, with the month's reading beside it: a month's rise of the
+# amount with none at once means the effect waits for a tick (which works: move the OK to the month's read); none at
+# either means add_momentum from a pulse does nothing, and patronage is the fallback everywhere (te_pa_cm_momentum_form
+# = always = no). A party gone before the read disarms the check for the next.
+te_pa_debug_momentum_read = {
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_mom_armed
+			NOT = { has_global_variable = te_pa_sc_mom_done }
+			this = global_var:te_pa_sc_mom_country
+			te_history_month_index > global_var:te_pa_sc_mom_month
+		}
+		if = {
+			limit = { NOT = { global_var:te_pa_sc_mom_party ?= { te_pa_party_momentum >= 0 } } }
+			te_pa_debug_momentum_disarm = yes
+		}
+		else = {
+			set_global_variable = { name = te_pa_sc_mom_done value = 1 }
+			global_var:te_pa_sc_mom_party = {
+				set_global_variable = { name = te_pa_sc_mom_later value = te_pa_party_momentum }
+			}
+			if = {
+				limit = { te_pa_sc_mom_now_gap >= te_pa_sc_mom_half }
+				debug_log = "TE_SELF_CHECK OK momentum_from_pulse want=[GetGlobalVariable('te_pa_sc_mom_want').GetValue|3] momentum=[GetGlobalVariable('te_pa_sc_mom_before').GetValue|3]>[GetGlobalVariable('te_pa_sc_mom_now').GetValue|3] month=[GetGlobalVariable('te_pa_sc_mom_later').GetValue|3] in_government=[GetGlobalVariable('te_pa_sc_mom_gov').GetValue|0] country=[THIS.GetCountry.GetTagName] (add_momentum from a pulse moves the party's momentum) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN momentum_from_pulse want=[GetGlobalVariable('te_pa_sc_mom_want').GetValue|3] momentum=[GetGlobalVariable('te_pa_sc_mom_before').GetValue|3]>[GetGlobalVariable('te_pa_sc_mom_now').GetValue|3] month=[GetGlobalVariable('te_pa_sc_mom_later').GetValue|3] in_government=[GetGlobalVariable('te_pa_sc_mom_gov').GetValue|0] country=[THIS.GetCountry.GetTagName] (no rise at once: if the month's reading rose by the amount, the effect waits for a tick and works; if not, add_momentum from a pulse does nothing. Fallback: patronage everywhere, te_pa_cm_momentum_form = always = no) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			te_pa_debug_momentum_disarm = yes
+		}
+	}
+}
+
+te_pa_debug_momentum_disarm = {
+	remove_global_variable = te_pa_sc_mom_armed
+	remove_global_variable = te_pa_sc_mom_party
+	remove_global_variable = te_pa_sc_mom_month
+	remove_global_variable = te_pa_sc_mom_want
+	remove_global_variable = te_pa_sc_mom_gov
+	remove_global_variable = te_pa_sc_mom_country
+	remove_global_variable = te_pa_sc_mom_before
+	if = {
+		limit = { has_global_variable = te_pa_sc_mom_now }
+		remove_global_variable = te_pa_sc_mom_now
+	}
+	if = {
+		limit = { has_global_variable = te_pa_sc_mom_later }
+		remove_global_variable = te_pa_sc_mom_later
+	}
 }
 
 # charter_monopoly (Task 4b), armed in company scope inside te_pa_charter_grant, just after the first charter's

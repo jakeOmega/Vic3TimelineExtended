@@ -266,8 +266,10 @@ class KindTest(unittest.TestCase):
 
 
 class StateActionsTest(unittest.TestCase):
-    ACTIONS = ("inquiry", "suit", "audit", "levy", "lift", "charter")
-    COSTS = ("te_pa_sa_cost", "te_pa_charter_cost")
+    ACTIONS = ("inquiry", "suit", "audit", "levy", "lift", "charter", "close_press")
+    # Task 5a's Close the Press costs through te_pa_sa_close_press_cost (te_pa_sa_cost, or nothing for a Restrained
+    # firm's press under Censorship)
+    COSTS = ("te_pa_sa_cost", "te_pa_charter_cost", "te_pa_sa_close_press_cost")
 
     @classmethod
     def setUpClass(cls):

@@ -374,6 +374,22 @@ class PrivateActorsTeardownTest(unittest.TestCase):
         check = self.effects["te_pa_rows_check"]
         self.assertIn(("has_variable_list", "te_pa_rows"), pairs(walk(check.children)))
 
+    def test_the_teardown_takes_patronage_and_the_politics_rows(self):
+        # Task 5a: every interest group's patronage modifier (generated, one a group), the Politics section's rows and
+        # the presses' list; the totals, the sides and the firms' records stay
+        self.assertIn("te_pa_politics_teardown", keys(self.effects["te_pa_teardown"]))
+        politics = top("common/scripted_effects/te_pa_politics_effects.txt")
+        teardown = politics["te_pa_politics_teardown"]
+        self.assertLessEqual({"te_pa_gen_patronage_remove_all", "te_pa_pol_view_clear"}, keys(teardown))
+        self.assertIn(("clear_variable_list", "te_pa_presses"), pairs(walk(teardown.children)))
+        self.assertNotIn("te_pa_sides_clear", keys(teardown))
+        generated = top("common/scripted_effects/te_pa_gen_effects.txt")["te_pa_gen_patronage_remove_all"]
+        removed = {n.value for n in walk(generated.children) if n.key == "remove_modifier"}
+        self.assertEqual(len(removed), 8)
+        self.assertTrue(all(name.startswith("te_pa_patronage_ig_") for name in removed))
+        view = politics["te_pa_pol_view_clear"]
+        self.assertIn("destroy_container", keys(view))
+
 
 if __name__ == "__main__":
     unittest.main()

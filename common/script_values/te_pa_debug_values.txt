@@ -82,3 +82,26 @@ te_pa_sc_rents_seat_gap = {
 	value = te_pa_sc_rents_seat_delta
 	if = { limit = { te_pa_sc_rents_seat_delta < 0 } multiply = -1 }
 }
+
+# law_progress (Task 5a, probe 10), country scope: the enactment's phase and setbacks, as values.
+te_pa_sc_phase_value = { value = enactment_phase }
+te_pa_sc_setbacks_value = { value = enactment_setback_count }
+
+# momentum_from_pulse (Task 5a, probe 9): the least momentum the check reads, half the amount, and the rise read at once.
+te_pa_sc_mom_min = 0.005
+te_pa_sc_mom_half = {
+	value = 0
+	if = { limit = { has_global_variable = te_pa_sc_mom_want } value = global_var:te_pa_sc_mom_want }
+	multiply = 0.5
+}
+te_pa_sc_mom_now_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_mom_now
+			has_global_variable = te_pa_sc_mom_before
+		}
+		value = global_var:te_pa_sc_mom_now
+		subtract = global_var:te_pa_sc_mom_before
+	}
+}

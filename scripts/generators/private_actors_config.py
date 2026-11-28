@@ -58,6 +58,10 @@ NUMBERS = {
     # guesses: a decree that promotes schooling gives 0.25 to 0.3, a company's prosperity bonus 0.05).
     "found_education": 0.1,
     "found_mortality": 0.05,
+    # Politics at home (Task 5a, § 8.3): patronage at its full total raises an interest group's political
+    # strength this much (the generated te_pa_patronage_<group> modifiers carry it, applied with the total over
+    # its full figure, at most 1: "capped at 20%").
+    "patronage_cap": 0.2,
 }
 
 # ---------------------------------------------------------------------------
@@ -714,8 +718,9 @@ NEUTRAL_IDEOLOGIES = {
 @dataclass(frozen=True)
 class NameLoc:
     key: str        # the customizable localization's key
-    kind: str       # "good" or "law"
-    variable: str   # the script container variable holding the index
+    kind: str       # "good", "law" or "ig" (an interest group type, numbered by key from 1)
+    variable: str   # the variable holding the index
+    scope: str = "container"  # the custom loc's type: a script container's variable, or a country's
 
 
 # A good's or a law's name from the index a firm's readings carry (te_pa_g_*_good, te_pa_g_law_*_law), read
@@ -730,4 +735,9 @@ NAME_LOCS = (
     # the trust's ledger lines (Task 4): the good a cartel restricts, the law a firm stalls
     NameLoc("te_pa_ledger_good", "good", "te_pa_l_good"),
     NameLoc("te_pa_ledger_law", "law", "te_pa_l_law"),
+    # politics at home (Task 5a): the interest group a ledger line's money backed, the Politics section's rows
+    # (one an interest group) and the law the country's sides are on (a country variable)
+    NameLoc("te_pa_ledger_ig", "ig", "te_pa_l_ig"),
+    NameLoc("te_pa_pv_ig_name", "ig", "te_pa_pv_ig"),
+    NameLoc("te_pa_pol_side_law", "law", "te_pa_side_law", "country"),
 )

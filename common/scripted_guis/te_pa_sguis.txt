@@ -181,3 +181,22 @@ te_pa_sa_charter_sgui = {
 		scope:te_pa_act_firm ?= { te_pa_charter_cost = yes }
 	}
 }
+
+# Close the Press (Task 5a, § 8.7; te_pa_politics_effects.txt): under Censorship, or once a suit against the firm has
+# been won. Its cost is te_pa_sa_cost's by Standing, except a Restrained firm's under Censorship, which costs nothing
+# (te_pa_sa_close_press_cost, § 8.5).
+te_pa_sa_close_press_sgui = {
+	scope = country
+	saved_scopes = { te_pa_row }
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_pa_sa_can_close_press_row = yes }
+	effect = {
+		scope:te_pa_row = { var:te_pa_r_firm ?= { save_scope_as = te_pa_act_firm } }
+		custom_tooltip = {
+			text = te_pa_sa_close_press_does_tt
+			te_pa_sa_close_press = yes
+		}
+		te_pa_sa_close_press_cost = yes
+	}
+}

@@ -361,13 +361,13 @@ class OutputsTest(unittest.TestCase):
     def test_name_locs_and_fallbacks(self):
         custom = read(gen.CUSTOM_LOC_OUT)
         loc = "".join(p.read_text(encoding="utf-8-sig") for p in (ROOT / "localization" / "english").glob("*.yml"))
-        for key in (gen.GOOD_UNKNOWN_KEY, gen.LAW_UNKNOWN_KEY):
+        for key in (gen.GOOD_UNKNOWN_KEY, gen.LAW_UNKNOWN_KEY, gen.IG_UNKNOWN_KEY):
             self.assertRegex(loc, rf"(?m)^ {key}:0 ")
         for entry in cfg.NAME_LOCS:
             with self.subTest(key=entry.key):
                 self.assertTrue(entry.key.startswith("te_pa_"))
                 body = block(custom, entry.key)
-                self.assertIn("type = container", body)
+                self.assertIn(f"type = {entry.scope}", body)
                 self.assertIn(f"var:{entry.variable} ?= 1 }}", body)
         good = block(custom, "te_pa_row_reason_good")
         plan = gen.build_plan(state())
@@ -507,11 +507,14 @@ class SyntheticTypeTest(unittest.TestCase):
 
 
 class AuditsTest(unittest.TestCase):
-    """The script audits that apply, over a tree holding the generated files and the two hand-written trigger
-    files they call (the audits' catalogs and vanilla's names come from the repo's docs/ and vanilla_parsed/)."""
+    """The script audits that apply, over a tree holding the generated files and the hand-written files they call:
+    two trigger files, and Task 5a's politics effects, whose per-interest-group helpers (te_pa_<x>_one) the
+    generated dispatch calls (the audits' catalogs and vanilla's names come from the repo's docs/ and
+    vanilla_parsed/)."""
 
     CALLED = ("common/scripted_triggers/te_creditors_consortium_triggers.txt",
-              "common/scripted_triggers/resource_transition_triggers.txt")
+              "common/scripted_triggers/resource_transition_triggers.txt",
+              "common/scripted_effects/te_pa_politics_effects.txt")
 
     @classmethod
     def setUpClass(cls):
